@@ -15,7 +15,7 @@ runner.add(function testMethodsReturnSelf() {
 	assert.equal(vReq.setDistributionId(),vReq);
 	assert.equal(vReq.setRequestId(),vReq);
 
-	assert.equal(vReq.setRequestBody(),vReq);
+	assert.equal(vReq.setBody(),vReq);
 	assert.equal(vReq.setClientIp(),vReq);
 	assert.equal(vReq.addRequestHttpHeader('',''),vReq);
 	assert.equal(vReq.setHttpMethod('GET'),vReq);
@@ -30,7 +30,7 @@ runner.add(function testMethodsReturnSelf() {
 	assert.equal(oReq.setDistributionId(),oReq);
 	assert.equal(oReq.setRequestId(),oReq);
 
-	assert.equal(oReq.setRequestBody(),oReq);
+	assert.equal(oReq.setBody(),oReq);
 	assert.equal(oReq.setClientIp(),oReq);
 	assert.equal(oReq.addRequestHttpHeader('',''),oReq);
 	assert.equal(oReq.setHttpMethod('GET'),oReq);
@@ -204,11 +204,11 @@ function testPropertyConfigRequestId(inst) {
 function testPropertyRequestBody(inst) {
 	assert.equal(cfEventData(inst).request.body,undefined);
 
-	inst.setRequestBody();
+	inst.setBody();
 	assert.equal(cfEventData(inst).request.body.data,'');
 	assert.equal(cfEventData(inst).request.body.inputTruncated,false);
 
-	inst.setRequestBody('hello there viewer!');
+	inst.setBody('hello there viewer!');
 	assert.deepEqual(cfEventData(inst).request.body,
 		{
 			action: 'read-only',
@@ -218,7 +218,8 @@ function testPropertyRequestBody(inst) {
 		}
 	);
 
-	inst.setRequestBody('',true);
+	inst.setBody('',true);
+	assert.equal(cfEventData(inst).request.body.data,'');
 	assert.equal(cfEventData(inst).request.body.inputTruncated,true);
 }
 

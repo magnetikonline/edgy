@@ -18,7 +18,7 @@ Npm module providing a harness for authoring unit or integration tests against N
 	- [setHttpMethod(method)](#sethttpmethodmethod)
 	- [setQuerystring(qs)](#setquerystringqs)
 	- [setUri(uri)](#seturiuri)
-	- [setRequestBody(data[,isTruncated])](#setrequestbodydataistruncated)
+	- [setBody(data[,isTruncated])](#setbodydataistruncated)
 	- [addRequestHttpHeader(key,value)](#addrequesthttpheaderkeyvalue)
 	- [setRequestOriginCustom(domainName[,path])](#setrequestorigincustomdomainnamepath)
 	- [setRequestOriginKeepaliveTimeout(timeout)](#setrequestoriginkeepalivetimeouttimeout)
@@ -92,7 +92,7 @@ Available methods:
 - [setHttpMethod(method)](#sethttpmethodmethod)
 - [setQuerystring(qs)](#setquerystringqs)
 - [setUri(uri)](#seturiuri)
-- [setRequestBody(data[,isTruncated])](#setrequestbodydataistruncated)
+- [setBody(data[,isTruncated])](#setbodydataistruncated)
 - [addRequestHttpHeader(key,value)](#addrequesthttpheaderkeyvalue)
 - [execute(handler)](#executehandler)
 
@@ -151,7 +151,7 @@ Available methods:
 - [setHttpMethod(method)](#sethttpmethodmethod)
 - [setQuerystring(qs)](#setquerystringqs)
 - [setUri(uri)](#seturiuri)
-- [setRequestBody(data[,isTruncated])](#setrequestbodydataistruncated)
+- [setBody(data[,isTruncated])](#setbodydataistruncated)
 - [addRequestHttpHeader(key,value)](#addrequesthttpheaderkeyvalue)
 - [setRequestOriginCustom(domainName[,path])](#setrequestorigincustomdomainnamepath)
 - [setRequestOriginKeepaliveTimeout(timeout)](#setrequestoriginkeepalivetimeouttimeout)
@@ -335,13 +335,13 @@ harness
 */
 ```
 
-### `setRequestBody(data[,isTruncated])`
+### `setBody(data[,isTruncated])`
 
-Adds a collection of request `body` properties. The given `data` will be base64 encoded automatically:
+Adds a collection of request `body` properties. The given `data` will be automatically `base64` encoded:
 
 ```js
 const harness = new edgy.EVENT_TYPE_CONSTRUCTOR();
-harness.setRequestBody('data payload',false);
+harness.setBody('data payload',false);
 
 /*
 {

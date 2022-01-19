@@ -140,8 +140,8 @@ class EdgeEventRequestBase extends EdgeEventBase {
 	}
 
 	// properties: request
-	setRequestBody(data,isTruncated = false) {
-		// note: `data` will be base64 encoded for the `cf.request.body.data` property
+	setBody(data,isTruncated = false) {
+		// note: `data` will be base64 encoded into the `cf.request.body.data` property
 		cfEventData(this._event).request.body = {
 			action: 'read-only',
 			data: Buffer.from(data || '').toString('base64'),
@@ -187,7 +187,7 @@ function buildEventBase(eventType,hasOrigin,hasResponse) {
 					requestId: undefined,
 				},
 				request: {
-					// note: skipping `body` property - added with call to `EdgeEventRequestBase.setRequestBody()`
+					// note: skipping `body` property - handled via `EdgeEventRequestBase.setBody()`
 					clientIp: '127.0.0.1',
 					headers: {},
 					method: 'GET',
