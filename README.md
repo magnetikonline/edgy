@@ -20,15 +20,15 @@ Npm module providing a harness for authoring unit or integration tests against N
 	- [setUri(uri)](#seturiuri)
 	- [setBody(data[,isTruncated])](#setbodydataistruncated)
 	- [addRequestHttpHeader(key,value)](#addrequesthttpheaderkeyvalue)
-	- [setRequestOriginCustom(domainName[,path])](#setrequestorigincustomdomainnamepath)
-	- [setRequestOriginKeepaliveTimeout(timeout)](#setrequestoriginkeepalivetimeouttimeout)
-	- [setRequestOriginPort(port)](#setrequestoriginportport)
-	- [setRequestOriginHttps(isHttps)](#setrequestoriginhttpsishttps)
-	- [setRequestOriginReadTimeout(timeout)](#setrequestoriginreadtimeouttimeout)
-	- [setRequestOriginSslProtocolList(protocolList)](#setrequestoriginsslprotocollistprotocollist)
-	- [setRequestOriginS3(domainName[,region][,path])](#setrequestorigins3domainnameregionpath)
-	- [setRequestOriginOAI(isOAI)](#setrequestoriginoaiisoai)
-	- [addRequestOriginHttpHeader(key,value)](#addrequestoriginhttpheaderkeyvalue)
+	- [setOriginCustom(domainName[,path])](#setorigincustomdomainnamepath)
+	- [setOriginKeepaliveTimeout(timeout)](#setoriginkeepalivetimeouttimeout)
+	- [setOriginPort(port)](#setoriginportport)
+	- [setOriginHttps(isHttps)](#setoriginhttpsishttps)
+	- [setOriginReadTimeout(timeout)](#setoriginreadtimeouttimeout)
+	- [setOriginSslProtocolList(protocolList)](#setoriginsslprotocollistprotocollist)
+	- [setOriginS3(domainName[,region][,path])](#setorigins3domainnameregionpath)
+	- [setOriginOAI(isOAI)](#setoriginoaiisoai)
+	- [addOriginHttpHeader(key,value)](#addoriginhttpheaderkeyvalue)
 	- [setResponseHttpStatusCode(code)](#setresponsehttpstatuscodecode)
 	- [addResponseHttpHeader(key,value)](#addresponsehttpheaderkeyvalue)
 	- [execute(handler)](#executehandler)
@@ -110,7 +110,7 @@ async function myTest() {
     .setHttpMethod('POST')
     .setUri('/path/to/api/route')
     .addRequestHttpHeader('X-Fancy-Header','apples')
-    .setRequestOriginS3('mybucket.s3.ap-southeast-2.amazonaws.com','ap-southeast-2');
+    .setOriginS3('mybucket.s3.ap-southeast-2.amazonaws.com','ap-southeast-2');
 
   const resp = await oReq.execute(
     // example edge function
@@ -153,15 +153,15 @@ Available methods:
 - [setUri(uri)](#seturiuri)
 - [setBody(data[,isTruncated])](#setbodydataistruncated)
 - [addRequestHttpHeader(key,value)](#addrequesthttpheaderkeyvalue)
-- [setRequestOriginCustom(domainName[,path])](#setrequestorigincustomdomainnamepath)
-- [setRequestOriginKeepaliveTimeout(timeout)](#setrequestoriginkeepalivetimeouttimeout)
-- [setRequestOriginPort(port)](#setrequestoriginportport)
-- [setRequestOriginHttps(isHttps)](#setrequestoriginhttpsishttps)
-- [setRequestOriginReadTimeout(timeout)](#setrequestoriginreadtimeouttimeout)
-- [setRequestOriginSslProtocolList(protocolList)](#setrequestoriginsslprotocollistprotocollist)
-- [setRequestOriginS3(domainName[,region][,path])](#setrequestorigins3domainnameregionpath)
-- [setRequestOriginOAI(isOAI)](#setrequestoriginoaiisoai)
-- [addRequestOriginHttpHeader(key,value)](#addrequestoriginhttpheaderkeyvalue)
+- [setOriginCustom(domainName[,path])](#setorigincustomdomainnamepath)
+- [setOriginKeepaliveTimeout(timeout)](#setoriginkeepalivetimeouttimeout)
+- [setOriginPort(port)](#setoriginportport)
+- [setOriginHttps(isHttps)](#setoriginhttpsishttps)
+- [setOriginReadTimeout(timeout)](#setoriginreadtimeouttimeout)
+- [setOriginSslProtocolList(protocolList)](#setoriginsslprotocollistprotocollist)
+- [setOriginS3(domainName[,region][,path])](#setorigins3domainnameregionpath)
+- [setOriginOAI(isOAI)](#setoriginoaiisoai)
+- [addOriginHttpHeader(key,value)](#addoriginhttpheaderkeyvalue)
 - [execute(handler)](#executehandler)
 
 ### `OriginResponse()`
@@ -206,15 +206,15 @@ Available methods:
 - [setQuerystring(qs)](#setquerystringqs)
 - [setUri(uri)](#seturiuri)
 - [addRequestHttpHeader(key,value)](#addrequesthttpheaderkeyvalue)
-- [setRequestOriginCustom(domainName[,path])](#setrequestorigincustomdomainnamepath)
-- [setRequestOriginKeepaliveTimeout(timeout)](#setrequestoriginkeepalivetimeouttimeout)
-- [setRequestOriginPort(port)](#setrequestoriginportport)
-- [setRequestOriginHttps(isHttps)](#setrequestoriginhttpsishttps)
-- [setRequestOriginReadTimeout(timeout)](#setrequestoriginreadtimeouttimeout)
-- [setRequestOriginSslProtocolList(protocolList)](#setrequestoriginsslprotocollistprotocollist)
-- [setRequestOriginS3(domainName[,region][,path])](#setrequestorigins3domainnameregionpath)
-- [setRequestOriginOAI(isOAI)](#setrequestoriginoaiisoai)
-- [addRequestOriginHttpHeader(key,value)](#addrequestoriginhttpheaderkeyvalue)
+- [setOriginCustom(domainName[,path])](#setorigincustomdomainnamepath)
+- [setOriginKeepaliveTimeout(timeout)](#setoriginkeepalivetimeouttimeout)
+- [setOriginPort(port)](#setoriginportport)
+- [setOriginHttps(isHttps)](#setoriginhttpsishttps)
+- [setOriginReadTimeout(timeout)](#setoriginreadtimeouttimeout)
+- [setOriginSslProtocolList(protocolList)](#setoriginsslprotocollistprotocollist)
+- [setOriginS3(domainName[,region][,path])](#setorigins3domainnameregionpath)
+- [setOriginOAI(isOAI)](#setoriginoaiisoai)
+- [addOriginHttpHeader(key,value)](#addoriginhttpheaderkeyvalue)
 - [setResponseHttpStatusCode(code)](#setresponsehttpstatuscodecode)
 - [addResponseHttpHeader(key,value)](#addresponsehttpheaderkeyvalue)
 - [execute(handler)](#executehandler)
@@ -391,29 +391,29 @@ harness
 */
 ```
 
-### `setRequestOriginCustom(domainName[,path])`
+### `setOriginCustom(domainName[,path])`
 
-### `setRequestOriginKeepaliveTimeout(timeout)`
+### `setOriginKeepaliveTimeout(timeout)`
 
-### `setRequestOriginPort(port)`
+### `setOriginPort(port)`
 
-### `setRequestOriginHttps(isHttps)`
+### `setOriginHttps(isHttps)`
 
-### `setRequestOriginReadTimeout(timeout)`
+### `setOriginReadTimeout(timeout)`
 
-### `setRequestOriginSslProtocolList(protocolList)`
+### `setOriginSslProtocolList(protocolList)`
 
 Methods to define a custom origin property set for the request event payload:
 
 ```js
 const harness = new edgy.EVENT_TYPE_CONSTRUCTOR();
 harness
-  .setRequestOriginCustom('example.org','/custom/origin/path')
-  .setRequestOriginKeepaliveTimeout(35)
-  .setRequestOriginPort(1234)
-  .setRequestOriginHttps(true)
-  .setRequestOriginReadTimeout(25)
-  .setRequestOriginSslProtocolList(['TLSv1.1','TLSv1.2']);
+  .setOriginCustom('example.org','/custom/origin/path')
+  .setOriginKeepaliveTimeout(35)
+  .setOriginPort(1234)
+  .setOriginHttps(true)
+  .setOriginReadTimeout(25)
+  .setOriginSslProtocolList(['TLSv1.1','TLSv1.2']);
 
 /*
 {
@@ -441,20 +441,20 @@ harness
 */
 ```
 
-### `setRequestOriginS3(domainName[,region][,path])`
+### `setOriginS3(domainName[,region][,path])`
 
-### `setRequestOriginOAI(isOAI)`
+### `setOriginOAI(isOAI)`
 
 Methods to define an S3 origin property set for the request event payload:
 
 ```js
 const harness = new edgy.EVENT_TYPE_CONSTRUCTOR();
 harness
-  .setRequestOriginS3(
+  .setOriginS3(
     'mybucket.s3.ap-southeast-2.amazonaws.com',
     'ap-southeast-2',
     '/s3/bucket/path')
-  .setRequestOriginOAI(true);
+  .setOriginOAI(true);
 
 /*
 {
@@ -479,19 +479,19 @@ harness
 */
 ```
 
-### `addRequestOriginHttpHeader(key,value)`
+### `addOriginHttpHeader(key,value)`
 
-Adds HTTP header items to the request origin event payload for both [custom](#setrequestorigincustomdomainnamepath) and [s3](#setrequestorigins3domainnameregionpath) targets:
+Adds HTTP header items to the request origin event payload for both [custom](#setorigincustomdomainnamepath) and [s3](#setorigins3domainnameregionpath) targets:
 
 ```js
 const harness = new edgy.EVENT_TYPE_CONSTRUCTOR();
 harness
-  .setRequestOriginS3(
+  .setOriginS3(
     'mybucket.s3.ap-southeast-2.amazonaws.com',
     'ap-southeast-2',
     '/s3/bucket/path')
-  .addRequestOriginHttpHeader('X-Custom-Header','apples')
-  .addRequestOriginHttpHeader('X-Custom-Header','oranges');
+  .addOriginHttpHeader('X-Custom-Header','apples')
+  .addOriginHttpHeader('X-Custom-Header','oranges');
 
 /*
 {

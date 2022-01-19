@@ -103,7 +103,7 @@ runner.add(async function testExecuteViewerRequest() {
 
 runner.add(async function testExecuteOriginRequest() {
 	const oReq = new main.OriginRequest();
-	oReq.setRequestOriginCustom('domain.tld');
+	oReq.setOriginCustom('domain.tld');
 
 	// test: Lambda@Edge functions with bad argument counts
 	await assert.rejects(async function() {

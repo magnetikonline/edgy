@@ -36,15 +36,15 @@ runner.add(function testMethodsReturnSelf() {
 	assert.equal(oReq.setHttpMethod('GET'),oReq);
 
 	// origin methods
-	assert.equal(oReq.setRequestOriginCustom(),oReq);
-	assert.equal(oReq.setRequestOriginKeepaliveTimeout(),oReq);
-	assert.equal(oReq.setRequestOriginPort(),oReq);
-	assert.equal(oReq.setRequestOriginHttps(),oReq);
-	assert.equal(oReq.setRequestOriginReadTimeout(),oReq);
-	assert.equal(oReq.setRequestOriginSslProtocolList([]),oReq);
-	assert.equal(oReq.setRequestOriginS3(),oReq);
-	assert.equal(oReq.setRequestOriginOAI(),oReq);
-	assert.equal(oReq.addRequestOriginHttpHeader('',''),oReq);
+	assert.equal(oReq.setOriginCustom(),oReq);
+	assert.equal(oReq.setOriginKeepaliveTimeout(),oReq);
+	assert.equal(oReq.setOriginPort(),oReq);
+	assert.equal(oReq.setOriginHttps(),oReq);
+	assert.equal(oReq.setOriginReadTimeout(),oReq);
+	assert.equal(oReq.setOriginSslProtocolList([]),oReq);
+	assert.equal(oReq.setOriginS3(),oReq);
+	assert.equal(oReq.setOriginOAI(),oReq);
+	assert.equal(oReq.addOriginHttpHeader('',''),oReq);
 
 	assert.equal(oReq.setQuerystring(''),oReq);
 	assert.equal(oReq.setUri(''),oReq);
@@ -62,15 +62,15 @@ runner.add(function testMethodsReturnSelf() {
 	assert.equal(oRsp.setHttpMethod('GET'),oRsp);
 
 	// origin methods
-	assert.equal(oRsp.setRequestOriginCustom(),oRsp);
-	assert.equal(oRsp.setRequestOriginKeepaliveTimeout(),oRsp);
-	assert.equal(oRsp.setRequestOriginPort(),oRsp);
-	assert.equal(oRsp.setRequestOriginHttps(),oRsp);
-	assert.equal(oRsp.setRequestOriginReadTimeout(),oRsp);
-	assert.equal(oRsp.setRequestOriginSslProtocolList([]),oRsp);
-	assert.equal(oRsp.setRequestOriginS3(),oRsp);
-	assert.equal(oRsp.setRequestOriginOAI(),oRsp);
-	assert.equal(oRsp.addRequestOriginHttpHeader('',''),oRsp);
+	assert.equal(oRsp.setOriginCustom(),oRsp);
+	assert.equal(oRsp.setOriginKeepaliveTimeout(),oRsp);
+	assert.equal(oRsp.setOriginPort(),oRsp);
+	assert.equal(oRsp.setOriginHttps(),oRsp);
+	assert.equal(oRsp.setOriginReadTimeout(),oRsp);
+	assert.equal(oRsp.setOriginSslProtocolList([]),oRsp);
+	assert.equal(oRsp.setOriginS3(),oRsp);
+	assert.equal(oRsp.setOriginOAI(),oRsp);
+	assert.equal(oRsp.addOriginHttpHeader('',''),oRsp);
 
 	assert.equal(oRsp.setQuerystring(''),oRsp);
 	assert.equal(oRsp.setUri(''),oRsp);
@@ -271,17 +271,17 @@ function testPropertyRequestOrigin(inst) {
 	assert.deepEqual(cfEventData(inst).request.origin,{});
 
 	// calling custom/S3 origin methods before origin mode set should throw error
-	assert.throws(function() { inst.setRequestOriginKeepaliveTimeout(666); });
-	assert.throws(function() { inst.setRequestOriginPort(123); });
-	assert.throws(function() { inst.setRequestOriginHttps(); });
-	assert.throws(function() { inst.setRequestOriginReadTimeout(6); });
-	assert.throws(function() { inst.setRequestOriginSslProtocolList([]); });
-	assert.throws(function() { inst.setRequestOriginOAI(); });
-	assert.throws(function() { inst.addRequestOriginHttpHeader(); });
+	assert.throws(function() { inst.setOriginKeepaliveTimeout(666); });
+	assert.throws(function() { inst.setOriginPort(123); });
+	assert.throws(function() { inst.setOriginHttps(); });
+	assert.throws(function() { inst.setOriginReadTimeout(6); });
+	assert.throws(function() { inst.setOriginSslProtocolList([]); });
+	assert.throws(function() { inst.setOriginOAI(); });
+	assert.throws(function() { inst.addOriginHttpHeader(); });
 
 
 	// test: origin [custom]
-	inst.setRequestOriginCustom('my-hostname.tld'); // note: `path` defaults to `/`
+	inst.setOriginCustom('my-hostname.tld'); // note: `path` defaults to `/`
 	assert.deepEqual(cfEventData(inst).request.origin,
 		{
 			custom: {
@@ -297,13 +297,13 @@ function testPropertyRequestOrigin(inst) {
 		}
 	);
 
-	inst.setRequestOriginCustom('my-hostname.tld','/my/path');
+	inst.setOriginCustom('my-hostname.tld','/my/path');
 	assert.equal(cfEventData(inst).request.origin.custom.path,'/my/path');
 
 	inst
-		.addRequestOriginHttpHeader('User-Agent','curl/7.x.x')
-		.addRequestOriginHttpHeader('Multi-Origin-Key','apples')
-		.addRequestOriginHttpHeader('Multi-Origin-Key','oranges');
+		.addOriginHttpHeader('User-Agent','curl/7.x.x')
+		.addOriginHttpHeader('Multi-Origin-Key','apples')
+		.addOriginHttpHeader('Multi-Origin-Key','oranges');
 
 	assert.deepEqual(cfEventData(inst).request.origin.custom.customHeaders,
 		{
@@ -317,55 +317,55 @@ function testPropertyRequestOrigin(inst) {
 		}
 	);
 
-	inst.setRequestOriginKeepaliveTimeout(666);
+	inst.setOriginKeepaliveTimeout(666);
 	assert.equal(cfEventData(inst).request.origin.custom.keepaliveTimeout,666);
-	inst.setRequestOriginKeepaliveTimeout('123');
+	inst.setOriginKeepaliveTimeout('123');
 	assert.equal(cfEventData(inst).request.origin.custom.keepaliveTimeout,123);
-	inst.setRequestOriginKeepaliveTimeout();
+	inst.setOriginKeepaliveTimeout();
 	assert.equal(cfEventData(inst).request.origin.custom.keepaliveTimeout,0);
-	inst.setRequestOriginKeepaliveTimeout('invalid');
+	inst.setOriginKeepaliveTimeout('invalid');
 	assert.equal(cfEventData(inst).request.origin.custom.keepaliveTimeout,0);
 
-	inst.setRequestOriginPort(123);
+	inst.setOriginPort(123);
 	assert.equal(cfEventData(inst).request.origin.custom.port,123);
-	inst.setRequestOriginPort('666');
+	inst.setOriginPort('666');
 	assert.equal(cfEventData(inst).request.origin.custom.port,666);
-	inst.setRequestOriginPort();
+	inst.setOriginPort();
 	assert.equal(cfEventData(inst).request.origin.custom.port,0);
-	inst.setRequestOriginPort('invalid');
+	inst.setOriginPort('invalid');
 	assert.equal(cfEventData(inst).request.origin.custom.port,0);
 
-	inst.setRequestOriginHttps();
+	inst.setOriginHttps();
 	assert.equal(cfEventData(inst).request.origin.custom.protocol,'http');
-	inst.setRequestOriginHttps(false);
+	inst.setOriginHttps(false);
 	assert.equal(cfEventData(inst).request.origin.custom.protocol,'http');
-	inst.setRequestOriginHttps(true);
+	inst.setOriginHttps(true);
 	assert.equal(cfEventData(inst).request.origin.custom.protocol,'https');
-	inst.setRequestOriginHttps(1);
+	inst.setOriginHttps(1);
 	assert.equal(cfEventData(inst).request.origin.custom.protocol,'https');
 
-	inst.setRequestOriginReadTimeout(6);
+	inst.setOriginReadTimeout(6);
 	assert.equal(cfEventData(inst).request.origin.custom.readTimeout,6);
-	inst.setRequestOriginReadTimeout('14');
+	inst.setOriginReadTimeout('14');
 	assert.equal(cfEventData(inst).request.origin.custom.readTimeout,14);
-	inst.setRequestOriginReadTimeout();
+	inst.setOriginReadTimeout();
 	assert.equal(cfEventData(inst).request.origin.custom.readTimeout,0);
-	inst.setRequestOriginReadTimeout('invalid');
+	inst.setOriginReadTimeout('invalid');
 	assert.equal(cfEventData(inst).request.origin.custom.readTimeout,0);
 
-	assert.throws(function() { inst.setRequestOriginSslProtocolList(); });
-	assert.throws(function() { inst.setRequestOriginSslProtocolList('not array'); });
-	inst.setRequestOriginSslProtocolList(['SSLv3','TLSv1.2','unknown']);
+	assert.throws(function() { inst.setOriginSslProtocolList(); });
+	assert.throws(function() { inst.setOriginSslProtocolList('not array'); });
+	inst.setOriginSslProtocolList(['SSLv3','TLSv1.2','unknown']);
 	assert.deepEqual(cfEventData(inst).request.origin.custom.sslProtocols,['SSLv3','TLSv1.2']);
-	inst.setRequestOriginSslProtocolList(['unknown']);
+	inst.setOriginSslProtocolList(['unknown']);
 	assert.deepEqual(cfEventData(inst).request.origin.custom.sslProtocols,[]);
 
 	// test: origin [custom] - ensure [S3] origin methods throw error when called in custom mode
-	assert.throws(function() { inst.setRequestOriginOAI(); });
+	assert.throws(function() { inst.setOriginOAI(); });
 
 
 	// test: origin [S3]
-	inst.setRequestOriginS3('my-bucket.s3.ap-southeast-2.amazonaws.com'); // note: `path` defaults to `/`
+	inst.setOriginS3('my-bucket.s3.ap-southeast-2.amazonaws.com'); // note: `path` defaults to `/`
 	assert.deepEqual(cfEventData(inst).request.origin,
 		{
 			s3: {
@@ -378,17 +378,17 @@ function testPropertyRequestOrigin(inst) {
 		}
 	);
 
-	inst.setRequestOriginS3('my-bucket.s3.ap-southeast-2.amazonaws.com','ap-southeast-2');
+	inst.setOriginS3('my-bucket.s3.ap-southeast-2.amazonaws.com','ap-southeast-2');
 	assert.equal(cfEventData(inst).request.origin.s3.path,'/');
 	assert.equal(cfEventData(inst).request.origin.s3.region,'ap-southeast-2');
-	inst.setRequestOriginS3('my-bucket.s3.ap-southeast-2.amazonaws.com','ap-southeast-2','/my/path');
+	inst.setOriginS3('my-bucket.s3.ap-southeast-2.amazonaws.com','ap-southeast-2','/my/path');
 	assert.equal(cfEventData(inst).request.origin.s3.path,'/my/path');
 	assert.equal(cfEventData(inst).request.origin.s3.region,'ap-southeast-2');
 
 	inst
-		.addRequestOriginHttpHeader('User-Agent','curl/7.x.x')
-		.addRequestOriginHttpHeader('Multi-Origin-Key','apples')
-		.addRequestOriginHttpHeader('Multi-Origin-Key','oranges');
+		.addOriginHttpHeader('User-Agent','curl/7.x.x')
+		.addOriginHttpHeader('Multi-Origin-Key','apples')
+		.addOriginHttpHeader('Multi-Origin-Key','oranges');
 
 	assert.deepEqual(cfEventData(inst).request.origin.s3.customHeaders,
 		{
@@ -402,21 +402,21 @@ function testPropertyRequestOrigin(inst) {
 		}
 	);
 
-	inst.setRequestOriginOAI();
+	inst.setOriginOAI();
 	assert.equal(cfEventData(inst).request.origin.s3.authMethod,'none');
-	inst.setRequestOriginOAI(false);
+	inst.setOriginOAI(false);
 	assert.equal(cfEventData(inst).request.origin.s3.authMethod,'none');
-	inst.setRequestOriginOAI(true);
+	inst.setOriginOAI(true);
 	assert.equal(cfEventData(inst).request.origin.s3.authMethod,'origin-access-identity');
-	inst.setRequestOriginOAI(1);
+	inst.setOriginOAI(1);
 	assert.equal(cfEventData(inst).request.origin.s3.authMethod,'origin-access-identity');
 
 	// test: origin [S3] - ensure [custom] origin methods throw error when called in S3 mode
-	assert.throws(function() { inst.setRequestOriginKeepaliveTimeout(666); });
-	assert.throws(function() { inst.setRequestOriginPort(123); });
-	assert.throws(function() { inst.setRequestOriginHttps(); });
-	assert.throws(function() { inst.setRequestOriginReadTimeout(6); });
-	assert.throws(function() { inst.setRequestOriginSslProtocolList([]); });
+	assert.throws(function() { inst.setOriginKeepaliveTimeout(666); });
+	assert.throws(function() { inst.setOriginPort(123); });
+	assert.throws(function() { inst.setOriginHttps(); });
+	assert.throws(function() { inst.setOriginReadTimeout(6); });
+	assert.throws(function() { inst.setOriginSslProtocolList([]); });
 }
 
 function testPropertyRequestQuerystring(inst) {

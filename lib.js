@@ -212,7 +212,7 @@ function buildEventBase(eventType,hasOrigin,hasResponse) {
 	return event;
 }
 
-function setEdgeEventRequestOriginCustom(event,domainName,path) {
+function setEdgeEventOriginCustom(event,domainName,path) {
 	cfEventData(event).request.origin = {
 		custom: {
 			customHeaders: {},
@@ -227,28 +227,28 @@ function setEdgeEventRequestOriginCustom(event,domainName,path) {
 	};
 }
 
-function setEdgeEventRequestOriginKeepaliveTimeout(event,timeout) {
-	verifyEdgeEventRequestOriginModeCustom(event);
+function setEdgeEventOriginKeepaliveTimeout(event,timeout) {
+	verifyEdgeEventOriginModeCustom(event);
 	cfEventData(event).request.origin.custom.keepaliveTimeout = intOrZero(timeout);
 }
 
-function setEdgeEventRequestOriginPort(event,port) {
-	verifyEdgeEventRequestOriginModeCustom(event);
+function setEdgeEventOriginPort(event,port) {
+	verifyEdgeEventOriginModeCustom(event);
 	cfEventData(event).request.origin.custom.port = intOrZero(port);
 }
 
-function setEdgeEventRequestOriginHttps(event,isHttps) {
-	verifyEdgeEventRequestOriginModeCustom(event);
+function setEdgeEventOriginHttps(event,isHttps) {
+	verifyEdgeEventOriginModeCustom(event);
 	cfEventData(event).request.origin.custom.protocol = (!!isHttps) ? 'https' : 'http';
 }
 
-function setEdgeEventRequestOriginReadTimeout(event,timeout) {
-	verifyEdgeEventRequestOriginModeCustom(event);
+function setEdgeEventOriginReadTimeout(event,timeout) {
+	verifyEdgeEventOriginModeCustom(event);
 	cfEventData(event).request.origin.custom.readTimeout = intOrZero(timeout);
 }
 
-function setEdgeEventRequestOriginSslProtocolList(event,protocolList) {
-	verifyEdgeEventRequestOriginModeCustom(event);
+function setEdgeEventOriginSslProtocolList(event,protocolList) {
+	verifyEdgeEventOriginModeCustom(event);
 
 	if (!Array.isArray(protocolList)) {
 		throw new Error('protocol list must be an array');
@@ -262,7 +262,7 @@ function setEdgeEventRequestOriginSslProtocolList(event,protocolList) {
 	cfEventData(event).request.origin.custom.sslProtocols = resultList;
 }
 
-function setEdgeEventRequestOriginS3(event,domainName,region,path) {
+function setEdgeEventOriginS3(event,domainName,region,path) {
 	cfEventData(event).request.origin = {
 		s3: {
 			authMethod: 'none',
@@ -274,13 +274,13 @@ function setEdgeEventRequestOriginS3(event,domainName,region,path) {
 	};
 }
 
-function setEdgeEventRequestOriginOAI(event,isOAI) {
-	verifyEdgeEventRequestOriginModeS3(event);
+function setEdgeEventOriginOAI(event,isOAI) {
+	verifyEdgeEventOriginModeS3(event);
 	cfEventData(event).request.origin.s3.authMethod = (!!isOAI) ? 'origin-access-identity' : 'none';
 }
 
-// addEdgeEventRequestOriginHttpHeader() is the only origin method shared by custom/S3 modes
-function addEdgeEventRequestOriginHttpHeader(event,key,value) {
+// addEdgeEventOriginHttpHeader() is the only origin method shared by custom/S3 modes
+function addEdgeEventOriginHttpHeader(event,key,value) {
 	const origin = cfEventData(event).request.origin;
 	if (origin.hasOwnProperty('custom')) {
 		addEdgeEventHttpHeaderKeyValue(origin.custom.customHeaders,key,value);
@@ -292,20 +292,20 @@ function addEdgeEventRequestOriginHttpHeader(event,key,value) {
 		return;
 	}
 
-	throw new Error('an origin mode must be set via [setRequestOriginCustom()/setRequestOriginS3()]');
+	throw new Error('an origin mode must be set via [setOriginCustom()/setOriginS3()]');
 }
 
-function verifyEdgeEventRequestOriginModeCustom(event) {
+function verifyEdgeEventOriginModeCustom(event) {
 	const origin = cfEventData(event).request.origin;
 	if ((origin === undefined) || !origin.hasOwnProperty('custom')) {
-		throw new Error('method only valid in custom origin [setRequestOriginCustom()] mode');
+		throw new Error('method only valid in custom origin [setOriginCustom()] mode');
 	}
 }
 
-function verifyEdgeEventRequestOriginModeS3(event) {
+function verifyEdgeEventOriginModeS3(event) {
 	const origin = cfEventData(event).request.origin;
 	if ((origin === undefined) || !origin.hasOwnProperty('s3')) {
-		throw new Error('method only valid in S3 origin [setRequestOriginS3()] mode');
+		throw new Error('method only valid in S3 origin [setOriginS3()] mode');
 	}
 }
 
@@ -626,15 +626,15 @@ module.exports = {
 	EdgeEventResponseBase,
 
 	// functions for mutating `event.Records[0].cf.request.origin.[custom|s3]`
-	setEdgeEventRequestOriginCustom,
-	setEdgeEventRequestOriginKeepaliveTimeout,
-	setEdgeEventRequestOriginPort,
-	setEdgeEventRequestOriginHttps,
-	setEdgeEventRequestOriginReadTimeout,
-	setEdgeEventRequestOriginSslProtocolList,
-	setEdgeEventRequestOriginS3,
-	setEdgeEventRequestOriginOAI,
-	addEdgeEventRequestOriginHttpHeader,
+	setEdgeEventOriginCustom,
+	setEdgeEventOriginKeepaliveTimeout,
+	setEdgeEventOriginPort,
+	setEdgeEventOriginHttps,
+	setEdgeEventOriginReadTimeout,
+	setEdgeEventOriginSslProtocolList,
+	setEdgeEventOriginS3,
+	setEdgeEventOriginOAI,
+	addEdgeEventOriginHttpHeader,
 
 	// functions for verifying returned Lambda@Edge function payloads
 	payloadVerifyRequest,
