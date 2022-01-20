@@ -488,7 +488,7 @@ function payloadVerifyRequestOrigin(payload) {
 
 		for (const item of custom.sslProtocols) {
 			if (!VALID_SSL_PROTOCOL_LIST.includes(item)) {
-				throw new Error(`payload property [origin.custom.sslProtocols] contains an invalid protocol - got [${item}]`);
+				throw new Error(`payload property [origin.custom.sslProtocols] contains an invalid protocol of [${item}]`);
 			}
 		}
 	}
