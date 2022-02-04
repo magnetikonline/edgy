@@ -62,7 +62,7 @@ function testPayloadVerifyRequest(inst,withMockOrigin = false) {
 				querystring: '',
 				uri: '/',
 			},
-			...extendBase
+			...extendBase,
 		};
 
 		if (mutate) {
@@ -259,7 +259,7 @@ function testPayloadVerifyRequestOrigin(inst) {
 				querystring: '',
 				uri: '/',
 			},
-			...extendBase
+			...extendBase,
 		};
 
 		if (mutate) {
