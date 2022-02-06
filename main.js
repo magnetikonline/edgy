@@ -59,6 +59,11 @@ class OriginRequest extends lib.EdgeEventRequestBase {
 		return this;
 	}
 
+	setOriginHttpHeader(key,value) {
+		lib.setEdgeEventOriginHttpHeader(this._event,key,value);
+		return this;
+	}
+
 	addOriginHttpHeader(key,value) {
 		lib.addEdgeEventOriginHttpHeader(this._event,key,value);
 		return this;
@@ -113,6 +118,11 @@ class OriginResponse extends lib.EdgeEventResponseBase {
 
 	setOriginOAI(isOAI) {
 		lib.setEdgeEventOriginOAI(this._event,isOAI);
+		return this;
+	}
+
+	setOriginHttpHeader(key,value) {
+		lib.setEdgeEventOriginHttpHeader(this._event,key,value);
 		return this;
 	}
 

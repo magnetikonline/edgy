@@ -87,6 +87,15 @@ class EdgeEventBase {
 		return this;
 	}
 
+	setRequestHttpHeader(key,value) {
+		setEdgeEventHttpHeaderKeyValue(
+			cfEventData(this._event).request.headers,
+			key,value
+		);
+
+		return this;
+	}
+
 	addRequestHttpHeader(key,value) {
 		addEdgeEventHttpHeaderKeyValue(
 			cfEventData(this._event).request.headers,
@@ -121,6 +130,7 @@ class EdgeEventBase {
 		return this;
 	}
 
+	// Lambda@Edge function executor
 	async execute(handler) {
 		// create copy of CloudFront Lambda@Edge event and execute Lambda@Edge handler
 		const event = cfEventClone(this._event);
@@ -160,6 +170,15 @@ class EdgeEventResponseBase extends EdgeEventBase {
 	}
 
 	// properties: response
+	setResponseHttpHeader(key,value) {
+		setEdgeEventHttpHeaderKeyValue(
+			cfEventData(this._event).response.headers,
+			key,value
+		);
+
+		return this;
+	}
+
 	addResponseHttpHeader(key,value) {
 		addEdgeEventHttpHeaderKeyValue(
 			cfEventData(this._event).response.headers,
@@ -279,7 +298,22 @@ function setEdgeEventOriginOAI(event,isOAI) {
 	cfEventData(event).request.origin.s3.authMethod = (!!isOAI) ? 'origin-access-identity' : 'none';
 }
 
-// addEdgeEventOriginHttpHeader() is the only origin method shared by custom/S3 modes
+// (set|add)EdgeEventOriginHttpHeader() are the only origin methods shared by custom/S3 modes
+function setEdgeEventOriginHttpHeader(event,key,value) {
+	const origin = cfEventData(event).request.origin;
+	if (origin.hasOwnProperty('custom')) {
+		setEdgeEventHttpHeaderKeyValue(origin.custom.customHeaders,key,value);
+		return;
+	}
+
+	if (origin.hasOwnProperty('s3')) {
+		setEdgeEventHttpHeaderKeyValue(origin.s3.customHeaders,key,value);
+		return;
+	}
+
+	throw new Error('an origin mode must be set via [setOriginCustom()/setOriginS3()]');
+}
+
 function addEdgeEventOriginHttpHeader(event,key,value) {
 	const origin = cfEventData(event).request.origin;
 	if (origin.hasOwnProperty('custom')) {
@@ -315,6 +349,24 @@ function setEdgeEventResponseHttpStatusCode(event,httpCode) {
 	response.statusDescription = HTTP_STATUS_CODE_DESCRIPTION[httpCode] || '';
 }
 
+function setEdgeEventHttpHeaderKeyValue(headerCollection,key,value) {
+	// trim whitespace/lowercase key
+	key = key.trim();
+	const keyLower = key.toLowerCase();
+
+	// if value not given, remove the header entirely
+	if (value === undefined) {
+		delete headerCollection[keyLower];
+		return;
+	}
+
+	// (re)set HTTP header in collection
+	headerCollection[keyLower] = [{
+		key: key,
+		value: value.trim(),
+	}];
+}
+
 function addEdgeEventHttpHeaderKeyValue(headerCollection,key,value) {
 	// trim whitespace/lowercase key
 	key = key.trim();
@@ -328,7 +380,7 @@ function addEdgeEventHttpHeaderKeyValue(headerCollection,key,value) {
 	// add HTTP header to collection
 	headerCollection[keyLower].push({
 		key: key,
-		value: value.trim(),
+		value: (value || '').trim(),
 	});
 }
 
@@ -633,6 +685,7 @@ module.exports = {
 	setEdgeEventOriginSslProtocolList,
 	setEdgeEventOriginS3,
 	setEdgeEventOriginOAI,
+	setEdgeEventOriginHttpHeader,
 	addEdgeEventOriginHttpHeader,
 
 	// functions for verifying returned Lambda@Edge function payloads

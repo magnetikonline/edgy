@@ -17,6 +17,7 @@ runner.add(function testMethodsReturnSelf() {
 
 	assert.equal(vReq.setBody(),vReq);
 	assert.equal(vReq.setClientIp(),vReq);
+	assert.equal(vReq.setRequestHttpHeader(''),vReq);
 	assert.equal(vReq.addRequestHttpHeader('',''),vReq);
 	assert.equal(vReq.setHttpMethod('GET'),vReq);
 	assert.equal(vReq.setQuerystring(''),vReq);
@@ -32,6 +33,7 @@ runner.add(function testMethodsReturnSelf() {
 
 	assert.equal(oReq.setBody(),oReq);
 	assert.equal(oReq.setClientIp(),oReq);
+	assert.equal(oReq.setRequestHttpHeader(''),oReq);
 	assert.equal(oReq.addRequestHttpHeader('',''),oReq);
 	assert.equal(oReq.setHttpMethod('GET'),oReq);
 
@@ -44,6 +46,7 @@ runner.add(function testMethodsReturnSelf() {
 	assert.equal(oReq.setOriginSslProtocolList([]),oReq);
 	assert.equal(oReq.setOriginS3(),oReq);
 	assert.equal(oReq.setOriginOAI(),oReq);
+	assert.equal(oReq.setOriginHttpHeader(''),oReq);
 	assert.equal(oReq.addOriginHttpHeader('',''),oReq);
 
 	assert.equal(oReq.setQuerystring(''),oReq);
@@ -58,6 +61,7 @@ runner.add(function testMethodsReturnSelf() {
 	assert.equal(oRsp.setRequestId(),oRsp);
 
 	assert.equal(oRsp.setClientIp(),oRsp);
+	assert.equal(oRsp.setRequestHttpHeader(''),oRsp);
 	assert.equal(oRsp.addRequestHttpHeader('',''),oRsp);
 	assert.equal(oRsp.setHttpMethod('GET'),oRsp);
 
@@ -70,11 +74,13 @@ runner.add(function testMethodsReturnSelf() {
 	assert.equal(oRsp.setOriginSslProtocolList([]),oRsp);
 	assert.equal(oRsp.setOriginS3(),oRsp);
 	assert.equal(oRsp.setOriginOAI(),oRsp);
+	assert.equal(oRsp.setOriginHttpHeader(''),oRsp);
 	assert.equal(oRsp.addOriginHttpHeader('',''),oRsp);
 
 	assert.equal(oRsp.setQuerystring(''),oRsp);
 	assert.equal(oRsp.setUri(''),oRsp);
 
+	assert.equal(oRsp.setResponseHttpHeader(''),oRsp);
 	assert.equal(oRsp.addResponseHttpHeader('',''),oRsp);
 	assert.equal(oRsp.setResponseHttpStatusCode(),oRsp);
 
@@ -87,11 +93,13 @@ runner.add(function testMethodsReturnSelf() {
 	assert.equal(vRsp.setRequestId(),vRsp);
 
 	assert.equal(vRsp.setClientIp(),vRsp);
+	assert.equal(vRsp.setRequestHttpHeader(''),vRsp);
 	assert.equal(vRsp.addRequestHttpHeader('',''),vRsp);
 	assert.equal(vRsp.setHttpMethod('GET'),vRsp);
 	assert.equal(vRsp.setQuerystring(''),vRsp);
 	assert.equal(vRsp.setUri(''),vRsp);
 
+	assert.equal(vRsp.setResponseHttpHeader(''),vRsp);
 	assert.equal(vRsp.addResponseHttpHeader('',''),vRsp);
 	assert.equal(vRsp.setResponseHttpStatusCode(),vRsp);
 });
@@ -230,8 +238,10 @@ function testPropertyRequestClientIp(inst) {
 }
 
 function testPropertyRequestHttpHeader(inst) {
+	// initial state is an empty header set
 	assert.deepEqual(cfEventData(inst).request.headers,{});
 
+	// add a series of HTTP headers
 	inst
 		.addRequestHttpHeader('Host','my-hostname.tld')
 		.addRequestHttpHeader('User-Agent','curl/7.x.x')
@@ -250,6 +260,25 @@ function testPropertyRequestHttpHeader(inst) {
 			],
 			'trim': [
 				{ key: 'Trim',value: 'value' },
+			],
+			'user-agent': [
+				{ key: 'User-Agent',value: 'curl/7.x.x' },
+			],
+		}
+	);
+
+	// set a series of HTTP headers
+	inst
+		.setRequestHttpHeader('Multi-Key','single-header') // reduce to a single header
+		.setRequestHttpHeader('trim'); // remove header
+
+	assert.deepEqual(cfEventData(inst).request.headers,
+		{
+			'host': [
+				{ key: 'Host',value: 'my-hostname.tld' },
+			],
+			'multi-key': [
+				{ key: 'Multi-Key',value: 'single-header' },
 			],
 			'user-agent': [
 				{ key: 'User-Agent',value: 'curl/7.x.x' },
@@ -277,6 +306,7 @@ function testPropertyRequestOrigin(inst) {
 	assert.throws(function() { inst.setOriginReadTimeout(6); });
 	assert.throws(function() { inst.setOriginSslProtocolList([]); });
 	assert.throws(function() { inst.setOriginOAI(); });
+	assert.throws(function() { inst.setOriginHttpHeader(); });
 	assert.throws(function() { inst.addOriginHttpHeader(); });
 
 
@@ -303,13 +333,32 @@ function testPropertyRequestOrigin(inst) {
 	inst
 		.addOriginHttpHeader('User-Agent','curl/7.x.x')
 		.addOriginHttpHeader('Multi-Origin-Key','apples')
-		.addOriginHttpHeader('Multi-Origin-Key','oranges');
+		.addOriginHttpHeader('Multi-Origin-Key','oranges')
+		.addOriginHttpHeader('X-Remove-Me','banana');
 
 	assert.deepEqual(cfEventData(inst).request.origin.custom.customHeaders,
 		{
 			'multi-origin-key': [
 				{ key: 'Multi-Origin-Key',value: 'apples' },
 				{ key: 'Multi-Origin-Key',value: 'oranges' },
+			],
+			'x-remove-me': [
+				{ key: 'X-Remove-Me',value: 'banana',},
+			],
+			'user-agent': [
+				{ key: 'User-Agent',value: 'curl/7.x.x' },
+			],
+		}
+	);
+
+	inst
+		.setOriginHttpHeader('Multi-Origin-Key','single-header') // reduce to a single header
+		.setOriginHttpHeader('X-Remove-Me'); // remove header
+
+	assert.deepEqual(cfEventData(inst).request.origin.custom.customHeaders,
+		{
+			'multi-origin-key': [
+				{ key: 'Multi-Origin-Key',value: 'single-header' },
 			],
 			'user-agent': [
 				{ key: 'User-Agent',value: 'curl/7.x.x' },
@@ -360,7 +409,7 @@ function testPropertyRequestOrigin(inst) {
 	inst.setOriginSslProtocolList(['unknown']);
 	assert.deepEqual(cfEventData(inst).request.origin.custom.sslProtocols,[]);
 
-	// test: origin [custom] - ensure [S3] origin methods throw error when called in custom mode
+	// test: origin [custom] - ensure [S3] only origin methods throw error when called in [custom] mode
 	assert.throws(function() { inst.setOriginOAI(); });
 
 
@@ -411,7 +460,7 @@ function testPropertyRequestOrigin(inst) {
 	inst.setOriginOAI(1);
 	assert.equal(cfEventData(inst).request.origin.s3.authMethod,'origin-access-identity');
 
-	// test: origin [S3] - ensure [custom] origin methods throw error when called in S3 mode
+	// test: origin [S3] - ensure [custom] only origin methods throw error when called in [S3] mode
 	assert.throws(function() { inst.setOriginKeepaliveTimeout(666); });
 	assert.throws(function() { inst.setOriginPort(123); });
 	assert.throws(function() { inst.setOriginHttps(); });
@@ -438,6 +487,7 @@ function testPropertyRequestUri(inst) {
 }
 
 function testPropertyResponseHttpHeader(inst) {
+	// initial state is an empty header set
 	assert.deepEqual(cfEventData(inst).response.headers,{});
 
 	// note: tested multiple HTTP header combos with `testPropertyRequestHttpHeader()` - so only limited testing here
@@ -452,6 +502,18 @@ function testPropertyResponseHttpHeader(inst) {
 			],
 			'server': [
 				{ key: 'Server',value: 'AmazonS3' },
+			],
+		}
+	);
+
+	inst
+		.setResponseHttpHeader('ETag','"mutated"')
+		.setResponseHttpHeader('Server');
+
+	assert.deepEqual(cfEventData(inst).response.headers,
+		{
+			'etag': [
+				{ key: 'ETag',value: '"mutated"' },
 			],
 		}
 	);
