@@ -316,9 +316,8 @@ function setEdgeEventResponseHttpStatusCode(event,httpCode) {
 }
 
 function addEdgeEventHttpHeaderKeyValue(headerCollection,key,value) {
-	// trim whitespace from key/value
+	// trim whitespace/lowercase key
 	key = key.trim();
-	value = value.trim();
 	const keyLower = key.toLowerCase();
 
 	// if HTTP header key doesn't exist - create
@@ -329,7 +328,7 @@ function addEdgeEventHttpHeaderKeyValue(headerCollection,key,value) {
 	// add HTTP header to collection
 	headerCollection[keyLower].push({
 		key: key,
-		value: value,
+		value: value.trim(),
 	});
 }
 
