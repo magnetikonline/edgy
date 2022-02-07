@@ -2,7 +2,7 @@
 
 [![Test](https://github.com/magnetikonline/edgy/actions/workflows/test.yaml/badge.svg)](https://github.com/magnetikonline/edgy/actions/workflows/test.yaml)
 
-Npm module providing a harness for authoring unit or integration tests against Node.js based AWS CloudFront [Lambda@Edge](https://docs.aws.amazon.com/lambda/latest/dg/lambda-edge.html) functions.
+A harness to assist in the authoring of tests for Node.js based AWS CloudFront [Lambda@Edge](https://docs.aws.amazon.com/lambda/latest/dg/lambda-edge.html) functions.
 
 - [What can this do?](#what-can-this-do)
 - [Usage](#usage)
@@ -19,6 +19,7 @@ Npm module providing a harness for authoring unit or integration tests against N
 	- [setQuerystring(qs)](#setquerystringqs)
 	- [setUri(uri)](#seturiuri)
 	- [setBody(data[,isTruncated])](#setbodydataistruncated)
+	- [setRequestHttpHeader(key[,value])](#setrequesthttpheaderkeyvalue)
 	- [addRequestHttpHeader(key,value)](#addrequesthttpheaderkeyvalue)
 	- [setOriginCustom(domainName[,path])](#setorigincustomdomainnamepath)
 	- [setOriginKeepaliveTimeout(timeout)](#setoriginkeepalivetimeouttimeout)
@@ -28,8 +29,10 @@ Npm module providing a harness for authoring unit or integration tests against N
 	- [setOriginSslProtocolList(protocolList)](#setoriginsslprotocollistprotocollist)
 	- [setOriginS3(domainName[,region][,path])](#setorigins3domainnameregionpath)
 	- [setOriginOAI(isOAI)](#setoriginoaiisoai)
+	- [setOriginHttpHeader(key[,value])](#setoriginhttpheaderkeyvalue)
 	- [addOriginHttpHeader(key,value)](#addoriginhttpheaderkeyvalue)
 	- [setResponseHttpStatusCode(code)](#setresponsehttpstatuscodecode)
+	- [setResponseHttpHeader(key[,value])](#setresponsehttpheaderkeyvalue)
 	- [addResponseHttpHeader(key,value)](#addresponsehttpheaderkeyvalue)
 	- [execute(handler)](#executehandler)
 - [Reference](#reference)
@@ -93,6 +96,7 @@ Available methods:
 - [setQuerystring(qs)](#setquerystringqs)
 - [setUri(uri)](#seturiuri)
 - [setBody(data[,isTruncated])](#setbodydataistruncated)
+- [setRequestHttpHeader(key[,value])](#setrequesthttpheaderkeyvalue)
 - [addRequestHttpHeader(key,value)](#addrequesthttpheaderkeyvalue)
 - [execute(handler)](#executehandler)
 
@@ -152,6 +156,7 @@ Available methods:
 - [setQuerystring(qs)](#setquerystringqs)
 - [setUri(uri)](#seturiuri)
 - [setBody(data[,isTruncated])](#setbodydataistruncated)
+- [setRequestHttpHeader(key[,value])](#setrequesthttpheaderkeyvalue)
 - [addRequestHttpHeader(key,value)](#addrequesthttpheaderkeyvalue)
 - [setOriginCustom(domainName[,path])](#setorigincustomdomainnamepath)
 - [setOriginKeepaliveTimeout(timeout)](#setoriginkeepalivetimeouttimeout)
@@ -161,6 +166,7 @@ Available methods:
 - [setOriginSslProtocolList(protocolList)](#setoriginsslprotocollistprotocollist)
 - [setOriginS3(domainName[,region][,path])](#setorigins3domainnameregionpath)
 - [setOriginOAI(isOAI)](#setoriginoaiisoai)
+- [setOriginHttpHeader(key[,value])](#setoriginhttpheaderkeyvalue)
 - [addOriginHttpHeader(key,value)](#addoriginhttpheaderkeyvalue)
 - [execute(handler)](#executehandler)
 
@@ -205,6 +211,7 @@ Available methods:
 - [setHttpMethod(method)](#sethttpmethodmethod)
 - [setQuerystring(qs)](#setquerystringqs)
 - [setUri(uri)](#seturiuri)
+- [setRequestHttpHeader(key[,value])](#setrequesthttpheaderkeyvalue)
 - [addRequestHttpHeader(key,value)](#addrequesthttpheaderkeyvalue)
 - [setOriginCustom(domainName[,path])](#setorigincustomdomainnamepath)
 - [setOriginKeepaliveTimeout(timeout)](#setoriginkeepalivetimeouttimeout)
@@ -214,8 +221,10 @@ Available methods:
 - [setOriginSslProtocolList(protocolList)](#setoriginsslprotocollistprotocollist)
 - [setOriginS3(domainName[,region][,path])](#setorigins3domainnameregionpath)
 - [setOriginOAI(isOAI)](#setoriginoaiisoai)
+- [setOriginHttpHeader(key[,value])](#setoriginhttpheaderkeyvalue)
 - [addOriginHttpHeader(key,value)](#addoriginhttpheaderkeyvalue)
 - [setResponseHttpStatusCode(code)](#setresponsehttpstatuscodecode)
+- [setResponseHttpHeader(key[,value])](#setresponsehttpheaderkeyvalue)
 - [addResponseHttpHeader(key,value)](#addresponsehttpheaderkeyvalue)
 - [execute(handler)](#executehandler)
 
@@ -260,8 +269,10 @@ Available methods:
 - [setHttpMethod(method)](#sethttpmethodmethod)
 - [setQuerystring(qs)](#setquerystringqs)
 - [setUri(uri)](#seturiuri)
+- [setRequestHttpHeader(key[,value])](#setrequesthttpheaderkeyvalue)
 - [addRequestHttpHeader(key,value)](#addrequesthttpheaderkeyvalue)
 - [setResponseHttpStatusCode(code)](#setresponsehttpstatuscodecode)
+- [setResponseHttpHeader(key[,value])](#setresponsehttpheaderkeyvalue)
 - [addResponseHttpHeader(key,value)](#addresponsehttpheaderkeyvalue)
 - [execute(handler)](#executehandler)
 
@@ -363,15 +374,17 @@ harness.setBody('data payload',false);
 */
 ```
 
+### `setRequestHttpHeader(key[,value])`
 ### `addRequestHttpHeader(key,value)`
 
-Adds HTTP header items to the request payload:
+Sets/adds HTTP header items to the request payload:
 
 ```js
 const harness = new edgy.EVENT_TYPE_CONSTRUCTOR();
 harness
   .addRequestHttpHeader('User-Agent','curl/7.66.0')
-  .addRequestHttpHeader('X-Custom-Header','apples');
+  .addRequestHttpHeader('X-Custom-Header','apples')
+  .addRequestHttpHeader('X-Custom-Header','oranges');
 
 /*
 {
@@ -381,7 +394,30 @@ harness
         request: {
           headers: {
             'user-agent': [ { key: 'User-Agent', value: 'curl/7.66.0' } ],
-            'x-custom-header': [ { key: 'X-Custom-Header', value: 'apples' } ]
+            'x-custom-header': [
+              { key: 'X-Custom-Header', value: 'apples' },
+              { key: 'X-Custom-Header', value: 'oranges' }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}
+*/
+
+harness
+  .setRequestHttpHeader('User-Agent','xyz')
+  .setRequestHttpHeader('X-Custom-Header'); // remove header
+
+/*
+{
+  Records: [
+    {
+      cf: {
+        request: {
+          headers: {
+            'user-agent': [ { key: 'User-Agent', value: 'xyz' } ]
           }
         }
       }
@@ -479,9 +515,10 @@ harness
 */
 ```
 
+### `setOriginHttpHeader(key[,value])`
 ### `addOriginHttpHeader(key,value)`
 
-Adds HTTP header items to the request origin event payload for both [custom](#setorigincustomdomainnamepath) and [s3](#setorigins3domainnameregionpath) targets:
+Sets/adds HTTP header items to the origin event payload for [custom](#setorigincustomdomainnamepath) and [s3](#setorigins3domainnameregionpath) targets:
 
 ```js
 const harness = new edgy.EVENT_TYPE_CONSTRUCTOR();
@@ -515,10 +552,30 @@ harness
   ]
 }
 */
+
+harness.setOriginHttpHeader('X-Custom-Header'); // remove header
+
+/*
+{
+  Records: [
+    {
+      cf: {
+        request: {
+          origin: {
+            s3: {
+              customHeaders: {}
+            }
+          }
+        }
+      }
+    }
+  ]
+}
+*/
 ```
 
 ### `setResponseHttpStatusCode(code)`
-
+### `setResponseHttpHeader(key[,value])`
 ### `addResponseHttpHeader(key,value)`
 
 Methods to set properties related to the response received from the upstream CloudFront target:
