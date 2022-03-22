@@ -4,6 +4,7 @@
 
 A harness to assist in the authoring of tests for Node.js based AWS CloudFront [Lambda@Edge](https://docs.aws.amazon.com/lambda/latest/dg/lambda-edge.html) functions.
 
+- [Installation](#installation)
 - [What can this do?](#what-can-this-do)
 - [Usage](#usage)
 	- [ViewerRequest()](#viewerrequest)
@@ -36,6 +37,12 @@ A harness to assist in the authoring of tests for Node.js based AWS CloudFront [
 	- [addResponseHttpHeader(key,value)](#addresponsehttpheaderkeyvalue)
 	- [execute(handler)](#executehandler)
 - [Reference](#reference)
+
+## Installation
+
+```sh
+$ npm install @magnetikonline/edgy
+```
 
 ## What can this do?
 
