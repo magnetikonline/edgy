@@ -1,4 +1,5 @@
 {
+	"javascript.format.enable": true,
 	"javascript.format.insertSpaceAfterCommaDelimiter": false,
 	"javascript.format.insertSpaceAfterFunctionKeywordForAnonymousFunctions": false,
 	"javascript.format.insertSpaceAfterOpeningAndBeforeClosingEmptyBraces": false,
