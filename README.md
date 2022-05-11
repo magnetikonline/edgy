@@ -618,8 +618,8 @@ Executes a Lambda@Edge function, passing a constructed event payload. Supports b
 
 After successful execution:
 
-- High level validations are performed against returned payload, verifying it should _at a minimum_ pass as a usable response by CloudFront. This should in _no way_ be considered comprehensive/complete, but should help catch obvious malformed payload cases.
-- Return the transformed payload from the executed Lambda@Edge function, allowing for additional assertions to be performed.
+- A series of validations are performed against the returned payload, verifying _it should_ be a usable response for CloudFront to accept. In _no way_ consider this to be comprehensive or complete - but should catch many obvious malformed payloads.
+- Return the transformed payload from the executed Lambda@Edge function, where additional assertions can then be performed.
 
 ```js
 const harness = new edgy.EVENT_TYPE_CONSTRUCTOR();
