@@ -594,7 +594,7 @@ function payloadPropertyExists(payload,property,prefix) {
 		return;
 	}
 
-	throw new Error(`expected payload property [${payloadPropertyDisplay(prefix,property)}] not found`);
+	throw new Error(`payload property [${payloadPropertyDisplay(prefix,property)}] not found`);
 }
 
 function payloadPropertyExistsObject(payload,property,prefix) {
