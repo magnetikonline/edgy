@@ -422,7 +422,7 @@ function payloadVerifyRequest(payload) {
 
 	// confirm expected properties exist
 	payloadPropertyExistsString(payload,'clientIp');
-	payloadPropertyExistsObject(payload,'headers');
+	payloadVerifyPropertyHeaders(payload,'headers');
 	payloadPropertyExistsString(payload,'method');
 	payloadPropertyExistsString(payload,'querystring');
 	payloadPropertyExistsString(payload,'uri');
@@ -489,7 +489,7 @@ function payloadVerifyRequestOrigin(payload) {
 		const custom = origin.custom;
 
 		// confirm expected properties exist
-		payloadPropertyExistsObject(custom,'customHeaders','origin.custom');
+		payloadVerifyPropertyHeaders(custom,'customHeaders','origin.custom');
 		payloadPropertyExistsString(custom,'domainName','origin.custom');
 		payloadPropertyExistsNumber(custom,'keepaliveTimeout','origin.custom');
 		payloadPropertyExistsString(custom,'path','origin.custom');
@@ -542,15 +542,13 @@ function payloadVerifyRequestOrigin(payload) {
 				throw new Error(`payload property [origin.custom.sslProtocols] contains an invalid protocol of [${item}]`);
 			}
 		}
-	}
-
-	if (origin.hasOwnProperty('s3')) {
+	} else if (origin.hasOwnProperty('s3')) {
 		payloadPropertyExistsObject(origin,'s3','origin');
 		const s3 = origin.s3;
 
 		// confirm expected properties exist
 		payloadPropertyExistsString(s3,'authMethod','origin.s3');
-		payloadPropertyExistsObject(s3,'customHeaders','origin.s3');
+		payloadVerifyPropertyHeaders(s3,'customHeaders','origin.s3');
 		payloadPropertyExistsString(s3,'domainName','origin.s3');
 		payloadPropertyExistsString(s3,'path','origin.s3');
 		payloadPropertyExistsString(s3,'region','origin.s3');
@@ -579,13 +577,58 @@ function payloadVerifyResponse(payload) {
 	}
 
 	// confirm expected properties exist
-	payloadPropertyExistsObject(payload,'headers');
+	payloadVerifyPropertyHeaders(payload,'headers');
 	payloadPropertyExistsString(payload,'status');
 	payloadPropertyExistsString(payload,'statusDescription');
 
 	// ensure `payload.status` is a valid/known HTTP status code
 	if (!HTTP_STATUS_CODE_DESCRIPTION.hasOwnProperty(payload.status)) {
 		throw new Error(`payload value [status] is an unknown HTTP status code - got [${payload.status}]`);
+	}
+}
+
+function payloadVerifyPropertyHeaders(payload,property,prefix) {
+	payloadPropertyExistsObject(payload,property,prefix);
+
+	const headerSet = payload[property];
+	for (const headerKey of Object.keys(headerSet)) {
+		// ensure header key is lowercase
+		if (headerKey != headerKey.toLowerCase()) {
+			throw new Error(`payload [${payloadPropertyDisplay(prefix,property)}] keys must all be lowercase - found [${headerKey}]`);
+		}
+
+		// header list must be an array
+		const headerList = headerSet[headerKey];
+		if (!Array.isArray(headerList)) {
+			throw new Error(`expected payload [${payloadPropertyDisplay(prefix,property)}] property [${headerKey}] to be of type array`);
+		}
+
+		for (const item of headerList) {
+			// each header item in list must be of object type
+			if (typeof item != 'object') {
+				throw new Error(`expected payload [${payloadPropertyDisplay(prefix,property)}] property [${headerKey}] items to be of type object`);
+			}
+
+			// if object has optional `key` property - must complement that of parent property name when lowercased
+			if (item.hasOwnProperty('key')) {
+				if (typeof item.key != 'string') {
+					throw new Error(`expected payload [${payloadPropertyDisplay(prefix,property)}] property [${headerKey}[].key] to be of type string`);
+				}
+
+				if (headerKey != item.key.toLowerCase()) {
+					throw new Error(`expected payload [${payloadPropertyDisplay(prefix,property)}] property [${headerKey}[].key] of [${item.key}] to match lowercased [${headerKey}] parent`);
+				}
+			}
+
+			// object must have a `value` property of type string
+			if (!item.hasOwnProperty('value')) {
+				throw new Error(`expected payload [${payloadPropertyDisplay(prefix,property)}] property [${headerKey}[].value] not found`);
+			}
+
+			if (typeof item.value != 'string') {
+				throw new Error(`expected payload [${payloadPropertyDisplay(prefix,property)}] property [${headerKey}[].value] to be of type string`);
+			}
+		}
 	}
 }
 
