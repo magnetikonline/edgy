@@ -57,7 +57,14 @@ function testPayloadVerifyRequest(inst,withMockOrigin = false) {
 		const payload = {
 			...{
 				clientIp: '127.0.0.1',
-				headers: {},
+				headers: {
+					'header-key': [
+						{
+							key: 'Header-Key',
+							value: 'header-value',
+						},
+					],
+				},
 				method: 'GET',
 				querystring: '',
 				uri: '/',
@@ -118,6 +125,70 @@ function testPayloadVerifyRequest(inst,withMockOrigin = false) {
 	assert.throws(function() {
 		callVerify(makePayload(function(payload) {
 			payload.headers = -1;
+		}));
+	});
+
+	assert.throws(function() {
+		callVerify(makePayload(function(payload) {
+			payload.headers = {
+				'UPPER-CASE': [],
+			};
+		}));
+	});
+
+	assert.throws(function() {
+		callVerify(makePayload(function(payload) {
+			payload.headers = {
+				'header-key': -1,
+			};
+		}));
+	});
+
+	assert.throws(function() {
+		callVerify(makePayload(function(payload) {
+			payload.headers = {
+				'header-key': [-1],
+			};
+		}));
+	});
+
+	assert.throws(function() {
+		callVerify(makePayload(function(payload) {
+			payload.headers = {
+				'header-key': [{}],
+			};
+		}));
+	});
+
+	assert.throws(function() {
+		callVerify(makePayload(function(payload) {
+			payload.headers = {
+				'header-key': [{
+					value: -1,
+				}],
+			};
+		}));
+	});
+
+	assert.throws(function() {
+		callVerify(makePayload(function(payload) {
+			payload.headers = {
+				'header-key': [{
+					key: -1,
+					value: 'header-value',
+				}],
+			};
+		}));
+	});
+
+	assert.throws(function() {
+		callVerify(makePayload(function(payload) {
+			payload.headers = {
+				'header-key': [{
+					key: 'Different-Header-Key',
+					value: 'header-value',
+				}],
+			};
 		}));
 	});
 
@@ -275,7 +346,14 @@ function testPayloadVerifyRequestOrigin(inst) {
 			{
 				origin: {
 					custom: {
-						customHeaders: {},
+						customHeaders: {
+							'header-key': [
+								{
+									key: 'Header-Key',
+									value: 'header-value',
+								},
+							],
+						},
 						domainName: 'example.org',
 						keepaliveTimeout: 1,
 						path: '/',
@@ -296,7 +374,14 @@ function testPayloadVerifyRequestOrigin(inst) {
 				origin: {
 					s3: {
 						authMethod: 'none',
-						customHeaders: {},
+						customHeaders: {
+							'header-key': [
+								{
+									key: 'Header-Key',
+									value: 'header-value',
+								},
+							],
+						},
 						domainName: 'bucket.s3.us-east-1.amazonaws.com',
 						path: '/',
 						region: 'us-east-1',
@@ -368,6 +453,70 @@ function testPayloadVerifyRequestOrigin(inst) {
 	assert.throws(function() {
 		callVerify(makePayloadWithOriginCustom(function(payload) {
 			payload.origin.custom.customHeaders = -1;
+		}));
+	});
+
+	assert.throws(function() {
+		callVerify(makePayloadWithOriginCustom(function(payload) {
+			payload.origin.custom.customHeaders = {
+				'UPPER-CASE': [],
+			};
+		}));
+	});
+
+	assert.throws(function() {
+		callVerify(makePayloadWithOriginCustom(function(payload) {
+			payload.origin.custom.customHeaders = {
+				'header-key': -1,
+			};
+		}));
+	});
+
+	assert.throws(function() {
+		callVerify(makePayloadWithOriginCustom(function(payload) {
+			payload.origin.custom.customHeaders = {
+				'header-key': [-1],
+			};
+		}));
+	});
+
+	assert.throws(function() {
+		callVerify(makePayloadWithOriginCustom(function(payload) {
+			payload.origin.custom.customHeaders = {
+				'header-key': [{}],
+			};
+		}));
+	});
+
+	assert.throws(function() {
+		callVerify(makePayloadWithOriginCustom(function(payload) {
+			payload.origin.custom.customHeaders = {
+				'header-key': [{
+					value: -1,
+				}],
+			};
+		}));
+	});
+
+	assert.throws(function() {
+		callVerify(makePayloadWithOriginCustom(function(payload) {
+			payload.origin.custom.customHeaders = {
+				'header-key': [{
+					key: -1,
+					value: 'header-value',
+				}],
+			};
+		}));
+	});
+
+	assert.throws(function() {
+		callVerify(makePayloadWithOriginCustom(function(payload) {
+			payload.origin.custom.customHeaders = {
+				'header-key': [{
+					key: 'Different-Header-Key',
+					value: 'header-value',
+				}],
+			};
 		}));
 	});
 
@@ -563,6 +712,70 @@ function testPayloadVerifyRequestOrigin(inst) {
 
 	assert.throws(function() {
 		callVerify(makePayloadWithOriginS3(function(payload) {
+			payload.origin.s3.customHeaders = {
+				'UPPER-CASE': [],
+			};
+		}));
+	});
+
+	assert.throws(function() {
+		callVerify(makePayloadWithOriginS3(function(payload) {
+			payload.origin.s3.customHeaders = {
+				'header-key': -1,
+			};
+		}));
+	});
+
+	assert.throws(function() {
+		callVerify(makePayloadWithOriginS3(function(payload) {
+			payload.origin.s3.customHeaders = {
+				'header-key': [-1],
+			};
+		}));
+	});
+
+	assert.throws(function() {
+		callVerify(makePayloadWithOriginS3(function(payload) {
+			payload.origin.s3.customHeaders = {
+				'header-key': [{}],
+			};
+		}));
+	});
+
+	assert.throws(function() {
+		callVerify(makePayloadWithOriginS3(function(payload) {
+			payload.origin.s3.customHeaders = {
+				'header-key': [{
+					value: -1,
+				}],
+			};
+		}));
+	});
+
+	assert.throws(function() {
+		callVerify(makePayloadWithOriginS3(function(payload) {
+			payload.origin.s3.customHeaders = {
+				'header-key': [{
+					key: -1,
+					value: 'header-value',
+				}],
+			};
+		}));
+	});
+
+	assert.throws(function() {
+		callVerify(makePayloadWithOriginS3(function(payload) {
+			payload.origin.s3.customHeaders = {
+				'header-key': [{
+					key: 'Different-Header-Key',
+					value: 'header-value',
+				}],
+			};
+		}));
+	});
+
+	assert.throws(function() {
+		callVerify(makePayloadWithOriginS3(function(payload) {
 			delete payload.origin.s3.domainName;
 		}));
 	});
@@ -611,7 +824,14 @@ function testPayloadVerifyResponse(inst) {
 
 	function makePayload(mutate) {
 		const payload = {
-			headers: {},
+			headers: {
+				'header-key': [
+					{
+						key: 'Header-Key',
+						value: 'header-value',
+					},
+				],
+			},
 			status: '200',
 			statusDescription: 'OK',
 		};
@@ -644,6 +864,70 @@ function testPayloadVerifyResponse(inst) {
 	assert.throws(function() {
 		callVerify(makePayload(function(payload) {
 			payload.headers = -1;
+		}));
+	});
+
+	assert.throws(function() {
+		callVerify(makePayload(function(payload) {
+			payload.headers = {
+				'UPPER-CASE': [],
+			};
+		}));
+	});
+
+	assert.throws(function() {
+		callVerify(makePayload(function(payload) {
+			payload.headers = {
+				'header-key': -1,
+			};
+		}));
+	});
+
+	assert.throws(function() {
+		callVerify(makePayload(function(payload) {
+			payload.headers = {
+				'header-key': [-1],
+			};
+		}));
+	});
+
+	assert.throws(function() {
+		callVerify(makePayload(function(payload) {
+			payload.headers = {
+				'header-key': [{}],
+			};
+		}));
+	});
+
+	assert.throws(function() {
+		callVerify(makePayload(function(payload) {
+			payload.headers = {
+				'header-key': [{
+					value: -1,
+				}],
+			};
+		}));
+	});
+
+	assert.throws(function() {
+		callVerify(makePayload(function(payload) {
+			payload.headers = {
+				'header-key': [{
+					key: -1,
+					value: 'header-value',
+				}],
+			};
+		}));
+	});
+
+	assert.throws(function() {
+		callVerify(makePayload(function(payload) {
+			payload.headers = {
+				'header-key': [{
+					key: 'Different-Header-Key',
+					value: 'header-value',
+				}],
+			};
 		}));
 	});
 
