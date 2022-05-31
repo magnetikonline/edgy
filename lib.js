@@ -594,39 +594,39 @@ function payloadVerifyPropertyHeaders(payload,property,prefix) {
 	for (const headerKey of Object.keys(headerSet)) {
 		// ensure header key is lowercase
 		if (headerKey != headerKey.toLowerCase()) {
-			throw new Error(`payload [${payloadPropertyDisplay(prefix,property)}] keys must all be lowercase - found [${headerKey}]`);
+			throw new Error(`payload [${payloadPropertyDisplay(property,prefix)}] keys must all be lowercase - found [${headerKey}]`);
 		}
 
 		// header list must be an array
 		const headerList = headerSet[headerKey];
 		if (!Array.isArray(headerList)) {
-			throw new Error(`expected payload [${payloadPropertyDisplay(prefix,property)}] property [${headerKey}] to be of type array`);
+			throw new Error(`expected payload [${payloadPropertyDisplay(property,prefix)}] property [${headerKey}] to be of type array`);
 		}
 
 		for (const item of headerList) {
 			// each header item in list must be of object type
 			if (typeof item != 'object') {
-				throw new Error(`expected payload [${payloadPropertyDisplay(prefix,property)}] property [${headerKey}] items to be of type object`);
+				throw new Error(`expected payload [${payloadPropertyDisplay(property,prefix)}] property [${headerKey}] items to be of type object`);
 			}
 
 			// if object has optional `key` property - must complement that of parent property name when lowercased
 			if (item.hasOwnProperty('key')) {
 				if (typeof item.key != 'string') {
-					throw new Error(`expected payload [${payloadPropertyDisplay(prefix,property)}] property [${headerKey}[].key] to be of type string`);
+					throw new Error(`expected payload [${payloadPropertyDisplay(property,prefix)}] property [${headerKey}[].key] to be of type string`);
 				}
 
 				if (headerKey != item.key.toLowerCase()) {
-					throw new Error(`expected payload [${payloadPropertyDisplay(prefix,property)}] property [${headerKey}[].key] of [${item.key}] to match lowercased [${headerKey}] parent`);
+					throw new Error(`expected payload [${payloadPropertyDisplay(property,prefix)}] property [${headerKey}[].key] of [${item.key}] to match lowercased [${headerKey}] parent`);
 				}
 			}
 
 			// object must have a `value` property of type string
 			if (!item.hasOwnProperty('value')) {
-				throw new Error(`expected payload [${payloadPropertyDisplay(prefix,property)}] property [${headerKey}[].value] not found`);
+				throw new Error(`expected payload [${payloadPropertyDisplay(property,prefix)}] property [${headerKey}[].value] not found`);
 			}
 
 			if (typeof item.value != 'string') {
-				throw new Error(`expected payload [${payloadPropertyDisplay(prefix,property)}] property [${headerKey}[].value] to be of type string`);
+				throw new Error(`expected payload [${payloadPropertyDisplay(property,prefix)}] property [${headerKey}[].value] to be of type string`);
 			}
 		}
 	}
@@ -637,7 +637,7 @@ function payloadPropertyExists(payload,property,prefix) {
 		return;
 	}
 
-	throw new Error(`payload property [${payloadPropertyDisplay(prefix,property)}] not found`);
+	throw new Error(`payload property [${payloadPropertyDisplay(property,prefix)}] not found`);
 }
 
 function payloadPropertyExistsObject(payload,property,prefix) {
@@ -646,7 +646,7 @@ function payloadPropertyExistsObject(payload,property,prefix) {
 		return;
 	}
 
-	throw new Error(`expected payload property [${payloadPropertyDisplay(prefix,property)}] to be of type object`);
+	throw new Error(`expected payload property [${payloadPropertyDisplay(property,prefix)}] to be of type object`);
 }
 
 function payloadPropertyExistsString(payload,property,prefix) {
@@ -655,7 +655,7 @@ function payloadPropertyExistsString(payload,property,prefix) {
 		return;
 	}
 
-	throw new Error(`expected payload property [${payloadPropertyDisplay(prefix,property)}] to be of type string`);
+	throw new Error(`expected payload property [${payloadPropertyDisplay(property,prefix)}] to be of type string`);
 }
 
 function payloadPropertyExistsNumber(payload,property,prefix) {
@@ -664,10 +664,10 @@ function payloadPropertyExistsNumber(payload,property,prefix) {
 		return;
 	}
 
-	throw new Error(`expected payload property [${payloadPropertyDisplay(prefix,property)}] to be of type number`);
+	throw new Error(`expected payload property [${payloadPropertyDisplay(property,prefix)}] to be of type number`);
 }
 
-function payloadPropertyDisplay(prefix,property) {
+function payloadPropertyDisplay(property,prefix) {
 	return (prefix) ? `${prefix}.${property}` : property;
 }
 
