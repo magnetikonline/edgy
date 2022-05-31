@@ -477,11 +477,11 @@ function payloadVerifyRequestOrigin(payload) {
 
 	// origin must contain a property - one of `custom` or `s3`
 	if (origin.hasOwnProperty('custom') && origin.hasOwnProperty('s3')) {
-		throw new Error('expected payload property [origin] to contain child of [custom] or [s3] - never both');
+		throw new Error('expected payload property [origin] to contain child property of [custom] or [s3] - never both');
 	}
 
 	if (!origin.hasOwnProperty('custom') && !origin.hasOwnProperty('s3')) {
-		throw new Error('expected payload property [origin] to contain child of either [custom] or [s3]');
+		throw new Error('expected payload property [origin] to contain child property of [custom] or [s3]');
 	}
 
 	if (origin.hasOwnProperty('custom')) {
@@ -555,7 +555,7 @@ function payloadVerifyRequestOrigin(payload) {
 		payloadPropertyExistsString(s3,'path','origin.s3');
 		payloadPropertyExistsString(s3,'region','origin.s3');
 
-		// verify `origin.s3.authMethod` is one of 'none' or 'origin-access-identity'
+		// verify `origin.s3.authMethod` is one of 'origin-access-identity' or 'none'
 		if (!['origin-access-identity','none'].includes(s3.authMethod)) {
 			throw new Error(`payload value [origin.s3.authMethod] must be 'origin-access-identity' or 'none' - got [${s3.authMethod}]`);
 		}
