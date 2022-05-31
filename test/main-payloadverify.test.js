@@ -1,6 +1,6 @@
 'use strict';
 
-const assert = require('assert').strict,
+const assert = require('assert/strict'),
 	util = require('./util.js'),
 	main = require('./../main.js'),
 
