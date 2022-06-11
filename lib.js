@@ -354,7 +354,7 @@ function setEdgeEventHttpHeaderKeyValue(headerCollection,key,value) {
 	key = key.trim();
 	const keyLower = key.toLowerCase();
 
-	// if value not given, remove the header entirely
+	// if value not given, remove header entirely
 	if (value === undefined) {
 		delete headerCollection[keyLower];
 		return;
