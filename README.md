@@ -73,7 +73,7 @@ async function myTest() {
     .addRequestHttpHeader('X-Fancy-Header','apples');
 
   const resp = await vReq.execute(
-    // example edge function
+    // example Lambda@Edge function
     async function(event) {
       return event.Records[0].cf.request;
     }
@@ -124,7 +124,7 @@ async function myTest() {
     .setOriginS3('mybucket.s3.ap-southeast-2.amazonaws.com','ap-southeast-2');
 
   const resp = await oReq.execute(
-    // example edge function
+    // example Lambda@Edge function
     async function(event) {
       return event.Records[0].cf.request;
     }
@@ -191,7 +191,7 @@ async function myTest() {
     .addResponseHttpHeader('X-Fancy-Header','oranges');
 
   const resp = await oRsp.execute(
-    // example edge function
+    // example Lambda@Edge function
     async function(event) {
       return event.Records[0].cf.response;
     }
@@ -249,7 +249,7 @@ async function myTest() {
     .addResponseHttpHeader('X-Fancy-Header','oranges');
 
   const resp = await vRsp.execute(
-    // example edge function
+    // example Lambda@Edge function
     async function(event) {
       return event.Records[0].cf.response;
     }
@@ -624,15 +624,15 @@ After successful execution:
 ```js
 const harness = new edgy.EVENT_TYPE_CONSTRUCTOR();
 
-// --- construct Lambda@Edge event payload using instance methods ---
+// -- construct event payload using instance methods --
 // .setHttpMethod()
 // .setUri()
 // .setQuerystring()
 // etc.
 
 // execute function against payload
-const resp = await vRsp.execute(
-  // example edge function
+const resp = await harness.execute(
+  // example Lambda@Edge function
   async function(event) {
     return event.Records[0].cf.response;
   }
