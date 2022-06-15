@@ -297,17 +297,29 @@ function testPropertyRequestMethod(inst) {
 }
 
 function testPropertyRequestOrigin(inst) {
+	function throwsOriginModeCustom(fn) {
+		assert.throws(fn,{ message: 'method only valid in custom origin [setOriginCustom()] mode' });
+	}
+
+	function throwsOriginModeS3(fn) {
+		assert.throws(fn,{ message: 'method only valid in S3 origin [setOriginS3()] mode' });
+	}
+
+	function throwsOriginModeEither(fn) {
+		assert.throws(fn,{ message: 'an origin mode must be set via one of [setOriginCustom()/setOriginS3()]' });
+	}
+
 	assert.deepEqual(cfEventData(inst).request.origin,{});
 
 	// calling custom/S3 origin methods before origin mode set should throw error
-	assert.throws(function() { inst.setOriginKeepaliveTimeout(666); });
-	assert.throws(function() { inst.setOriginPort(123); });
-	assert.throws(function() { inst.setOriginHttps(); });
-	assert.throws(function() { inst.setOriginReadTimeout(6); });
-	assert.throws(function() { inst.setOriginSslProtocolList([]); });
-	assert.throws(function() { inst.setOriginOAI(); });
-	assert.throws(function() { inst.setOriginHttpHeader(); });
-	assert.throws(function() { inst.addOriginHttpHeader(); });
+	throwsOriginModeCustom(function() { inst.setOriginKeepaliveTimeout(666); });
+	throwsOriginModeCustom(function() { inst.setOriginPort(123); });
+	throwsOriginModeCustom(function() { inst.setOriginHttps(); });
+	throwsOriginModeCustom(function() { inst.setOriginReadTimeout(6); });
+	throwsOriginModeCustom(function() { inst.setOriginSslProtocolList([]); });
+	throwsOriginModeS3(function() { inst.setOriginOAI(); });
+	throwsOriginModeEither(function() { inst.setOriginHttpHeader(); });
+	throwsOriginModeEither(function() { inst.addOriginHttpHeader(); });
 
 
 	// test: origin [custom]
@@ -410,7 +422,7 @@ function testPropertyRequestOrigin(inst) {
 	assert.deepEqual(cfEventData(inst).request.origin.custom.sslProtocols,[]);
 
 	// test: origin [custom] - ensure [S3] only origin methods throw error when called in [custom] mode
-	assert.throws(function() { inst.setOriginOAI(); });
+	throwsOriginModeS3(function() { inst.setOriginOAI(); });
 
 
 	// test: origin [S3]
@@ -461,11 +473,11 @@ function testPropertyRequestOrigin(inst) {
 	assert.equal(cfEventData(inst).request.origin.s3.authMethod,'origin-access-identity');
 
 	// test: origin [S3] - ensure [custom] only origin methods throw error when called in [S3] mode
-	assert.throws(function() { inst.setOriginKeepaliveTimeout(666); });
-	assert.throws(function() { inst.setOriginPort(123); });
-	assert.throws(function() { inst.setOriginHttps(); });
-	assert.throws(function() { inst.setOriginReadTimeout(6); });
-	assert.throws(function() { inst.setOriginSslProtocolList([]); });
+	throwsOriginModeCustom(function() { inst.setOriginKeepaliveTimeout(666); });
+	throwsOriginModeCustom(function() { inst.setOriginPort(123); });
+	throwsOriginModeCustom(function() { inst.setOriginHttps(); });
+	throwsOriginModeCustom(function() { inst.setOriginReadTimeout(6); });
+	throwsOriginModeCustom(function() { inst.setOriginSslProtocolList([]); });
 }
 
 function testPropertyRequestQuerystring(inst) {

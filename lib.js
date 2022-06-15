@@ -311,7 +311,7 @@ function setEdgeEventOriginHttpHeader(event,key,value) {
 		return;
 	}
 
-	throw new Error('an origin mode must be set via [setOriginCustom()/setOriginS3()]');
+	throw new Error('an origin mode must be set via one of [setOriginCustom()/setOriginS3()]');
 }
 
 function addEdgeEventOriginHttpHeader(event,key,value) {
@@ -326,7 +326,7 @@ function addEdgeEventOriginHttpHeader(event,key,value) {
 		return;
 	}
 
-	throw new Error('an origin mode must be set via [setOriginCustom()/setOriginS3()]');
+	throw new Error('an origin mode must be set via one of [setOriginCustom()/setOriginS3()]');
 }
 
 function verifyEdgeEventOriginModeCustom(event) {
