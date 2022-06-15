@@ -5,7 +5,7 @@ const lib = require('./lib.js');
 
 class ViewerRequest extends lib.EdgeEventRequestBase {
 	constructor() {
-		super('viewer-request',false);
+		super('viewer-request');
 	}
 
 	_payloadVerify(payload) {
@@ -138,7 +138,7 @@ class OriginResponse extends lib.EdgeEventResponseBase {
 
 class ViewerResponse extends lib.EdgeEventResponseBase {
 	constructor() {
-		super('viewer-response',false);
+		super('viewer-response');
 	}
 
 	_payloadVerify(payload) {

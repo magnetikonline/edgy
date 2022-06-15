@@ -144,7 +144,7 @@ class EdgeEventBase {
 }
 
 class EdgeEventRequestBase extends EdgeEventBase {
-	constructor(eventType,hasOrigin) {
+	constructor(eventType,hasOrigin = false) {
 		super();
 		this._event = buildEventBase(eventType,hasOrigin,false);
 	}
@@ -164,7 +164,7 @@ class EdgeEventRequestBase extends EdgeEventBase {
 }
 
 class EdgeEventResponseBase extends EdgeEventBase {
-	constructor(eventType,hasOrigin) {
+	constructor(eventType,hasOrigin = false) {
 		super();
 		this._event = buildEventBase(eventType,hasOrigin,true);
 	}
@@ -206,7 +206,7 @@ function buildEventBase(eventType,hasOrigin,hasResponse) {
 					requestId: undefined,
 				},
 				request: {
-					// note: skipping `body` property - handled via `EdgeEventRequestBase.setBody()`
+					// note: skipping `body` property - will be handled/added via `EdgeEventRequestBase.setBody()`
 					clientIp: '127.0.0.1',
 					headers: {},
 					method: 'GET',
