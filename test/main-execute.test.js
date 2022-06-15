@@ -11,13 +11,7 @@ runner.add(async function testExecuteViewerRequest() {
 	const vReq = new main.ViewerRequest();
 
 	// test: Lambda@Edge functions with bad argument counts
-	await assert.rejects(async function() {
-		await vReq.execute(edgeFunctionAsyncBadArgCount);
-	});
-
-	await assert.rejects(async function() {
-		await vReq.execute(edgeFunctionCallbackBadArgCount);
-	});
+	rejectsExecuteBadArgCount(vReq);
 
 	// test: Lambda@Edge functions returning errors
 	await assert.rejects(vReq.execute(
@@ -106,13 +100,7 @@ runner.add(async function testExecuteOriginRequest() {
 	oReq.setOriginCustom('domain.tld');
 
 	// test: Lambda@Edge functions with bad argument counts
-	await assert.rejects(async function() {
-		await oReq.execute(edgeFunctionAsyncBadArgCount);
-	});
-
-	await assert.rejects(async function() {
-		await oReq.execute(edgeFunctionCallbackBadArgCount);
-	});
+	rejectsExecuteBadArgCount(oReq);
 
 	// test: Lambda@Edge functions returning errors
 	await assert.rejects(oReq.execute(
@@ -224,13 +212,7 @@ runner.add(async function testExecuteOriginResponse() {
 	const oRsp = new main.OriginResponse();
 
 	// test: Lambda@Edge functions with bad argument counts
-	await assert.rejects(async function() {
-		await oRsp.execute(edgeFunctionAsyncBadArgCount);
-	});
-
-	await assert.rejects(async function() {
-		await oRsp.execute(edgeFunctionCallbackBadArgCount);
-	});
+	rejectsExecuteBadArgCount(oRsp);
 
 	// test: Lambda@Edge functions returning errors
 	await assert.rejects(oRsp.execute(
@@ -311,13 +293,7 @@ runner.add(async function testExecuteViewerResponse() {
 	const vRsp = new main.ViewerResponse();
 
 	// test: Lambda@Edge functions with bad argument counts
-	await assert.rejects(async function() {
-		await vRsp.execute(edgeFunctionAsyncBadArgCount);
-	});
-
-	await assert.rejects(async function() {
-		await vRsp.execute(edgeFunctionCallbackBadArgCount);
-	});
+	rejectsExecuteBadArgCount(vRsp);
 
 	// test: Lambda@Edge functions returning errors
 	await assert.rejects(vRsp.execute(
@@ -394,12 +370,24 @@ runner.add(async function testExecuteViewerResponse() {
 });
 
 
-async function edgeFunctionAsyncBadArgCount() {
-	// note: an async Lambda@Edge function needs 1 or 2 arguments
-}
+async function rejectsExecuteBadArgCount(inst) {
+	await assert.rejects(
+		async function() {
+			await inst.execute(async function() {
+				// note: an async Lambda@Edge function needs 1 or 2 arguments
+			});
+		},
+		{ message: 'unexpected async handler argument count - expecting either one or two arguments' }
+	);
 
-function edgeFunctionCallbackBadArgCount() {
-	// note: a callback Lambda@Edge function needs exactly 3 arguments
+	await assert.rejects(
+		async function() {
+			await inst.execute(function() {
+				// note: a callback Lambda@Edge function needs exactly 3 arguments
+			});
+		},
+		{ message: 'unexpected callback handler argument count - expecting exactly three arguments' }
+	);
 }
 
 function buildEdgeFunctionRequestAsync(mutate) {

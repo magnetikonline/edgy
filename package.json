@@ -1,6 +1,6 @@
 {
 	"name": "@magnetikonline/edgy",
-	"version": "1.2.1",
+	"version": "1.2.2",
 	"description": "Harness for authoring tests against AWS CloudFront Lambda@Edge functions.",
 	"keywords": [
 		"aws",
