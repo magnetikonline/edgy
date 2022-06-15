@@ -372,12 +372,8 @@ function addEdgeEventHttpHeaderKeyValue(headerCollection,key,value) {
 	key = key.trim();
 	const keyLower = key.toLowerCase();
 
-	// if HTTP header key doesn't exist - create
-	if (!headerCollection.hasOwnProperty(keyLower)) {
-		headerCollection[keyLower] = [];
-	}
-
 	// add HTTP header to collection
+	headerCollection[keyLower] = headerCollection[keyLower] ?? [];
 	headerCollection[keyLower].push({
 		key: key,
 		value: (value || '').trim(),
