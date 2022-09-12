@@ -16,6 +16,17 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 16.x
+      - name: Setup Node.js modules cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - name: Install npm packages
+        run: npm ci
+      - name: Lint
+        run: npx eslint .
       - name: Test
-        run: |
-          ./test/test.sh
+        run: ./test/test.sh
