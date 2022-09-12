@@ -1,0 +1,27 @@
+{
+	"root": true,
+	"env": {
+		"es2020": true,
+		"node": true
+	},
+	"extends": [
+		"eslint:recommended"
+	],
+	"rules": {
+		"comma-dangle": [
+			"error",
+			{
+				"arrays": "always-multiline",
+				"objects": "always-multiline"
+			}
+		],
+		"eqeqeq": "error",
+		"no-prototype-builtins": "off",
+		"no-unused-vars": [
+			"error",
+			{
+				"args": "none"
+			}
+		]
+	}
+}
