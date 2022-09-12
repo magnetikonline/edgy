@@ -34,7 +34,7 @@ runner.add(function testPayloadVerifyViewerResponse() {
 
 function testPayloadVerifyRequest(inst,withMockOrigin = false) {
 	function callVerify(payload) {
-		if (withMockOrigin && (typeof payload == 'object')) {
+		if (withMockOrigin && (typeof payload === 'object')) {
 			// bolt on an `origin = {}` property to the payload
 			payload.origin = {
 				custom: {
@@ -46,7 +46,7 @@ function testPayloadVerifyRequest(inst,withMockOrigin = false) {
 					protocol: 'https',
 					readTimeout: 4,
 					sslProtocols: [],
-				}
+				},
 			};
 		}
 
@@ -88,7 +88,7 @@ function testPayloadVerifyRequest(inst,withMockOrigin = false) {
 					data: '',
 					encoding: 'base64',
 					inputTruncated: false,
-				}
+				},
 			}
 		);
 	}
@@ -361,8 +361,8 @@ function testPayloadVerifyRequestOrigin(inst) {
 						protocol: 'https',
 						readTimeout: 4,
 						sslProtocols: [],
-					}
-				}
+					},
+				},
 			}
 		);
 	}
@@ -385,8 +385,8 @@ function testPayloadVerifyRequestOrigin(inst) {
 						domainName: 'bucket.s3.us-east-1.amazonaws.com',
 						path: '/',
 						region: 'us-east-1',
-					}
-				}
+					},
+				},
 			}
 		);
 	}

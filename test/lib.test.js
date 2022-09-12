@@ -11,9 +11,9 @@ runner.add(function testSetEdgeEventResponseHttpStatusCode() {
 	const mockEvent = {
 		Records: [{
 			cf: {
-				response: {}
-			}
-		}]
+				response: {},
+			},
+		}],
 	};
 
 	function assertStatus(httpCode,description) {

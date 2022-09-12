@@ -213,8 +213,8 @@ function buildEventBase(eventType,hasOrigin,hasResponse) {
 					querystring: '',
 					uri: '/',
 				},
-			}
-		}]
+			},
+		}],
 	};
 
 	if (hasOrigin) {
@@ -242,7 +242,7 @@ function setEdgeEventOriginCustom(event,domainName,path) {
 			protocol: 'https',
 			readTimeout: 4,
 			sslProtocols: [],
-		}
+		},
 	};
 }
 
@@ -258,7 +258,7 @@ function setEdgeEventOriginPort(event,port) {
 
 function setEdgeEventOriginHttps(event,isHttps) {
 	verifyEdgeEventOriginModeCustom(event);
-	cfEventData(event).request.origin.custom.protocol = (!!isHttps) ? 'https' : 'http';
+	cfEventData(event).request.origin.custom.protocol = (isHttps) ? 'https' : 'http';
 }
 
 function setEdgeEventOriginReadTimeout(event,timeout) {
@@ -289,13 +289,13 @@ function setEdgeEventOriginS3(event,domainName,region,path) {
 			domainName: domainName,
 			path: (path || '/'),
 			region: (region || ''),
-		}
+		},
 	};
 }
 
 function setEdgeEventOriginOAI(event,isOAI) {
 	verifyEdgeEventOriginModeS3(event);
-	cfEventData(event).request.origin.s3.authMethod = (!!isOAI) ? 'origin-access-identity' : 'none';
+	cfEventData(event).request.origin.s3.authMethod = (isOAI) ? 'origin-access-identity' : 'none';
 }
 
 // (set|add)EdgeEventOriginHttpHeader() are the only origin methods shared by custom/S3 modes
@@ -385,7 +385,7 @@ async function executeHandler(handler,event) {
 
 	// execute Lambda@Edge handler based on type
 	// see: https://docs.aws.amazon.com/lambda/latest/dg/nodejs-handler.html
-	if (handler.constructor.name == 'AsyncFunction') {
+	if (handler.constructor.name === 'AsyncFunction') {
 		if (argLength < 1 || argLength > 2) {
 			throw new Error('unexpected async handler argument count - expecting either one or two arguments');
 		}
@@ -394,7 +394,7 @@ async function executeHandler(handler,event) {
 	}
 
 	// callback handler
-	if (argLength != 3) {
+	if (argLength !== 3) {
 		throw new Error('unexpected callback handler argument count - expecting exactly three arguments');
 	}
 
@@ -412,7 +412,7 @@ async function executeHandler(handler,event) {
 
 function payloadVerifyRequest(payload) {
 	// payload must be an object
-	if (typeof payload != 'object') {
+	if (typeof payload !== 'object') {
 		throw new Error('expected payload to be of type object');
 	}
 
@@ -429,7 +429,7 @@ function payloadVerifyRequest(payload) {
 	}
 
 	// ensure `payload.uri` starts with forward slash
-	if (payload.uri.slice(0,1) != '/') {
+	if (payload.uri.slice(0,1) !== '/') {
 		throw new Error(`payload value [uri] must begin with forward slash - got [${payload.uri}]`);
 	}
 
@@ -457,11 +457,11 @@ function payloadVerifyRequest(payload) {
 
 function payloadVerifyRequestOrigin(payload) {
 	function isValidPath(path) {
-		if (path.slice(0,1) != '/') {
+		if (path.slice(0,1) !== '/') {
 			return false;
 		}
 
-		if ((path != '/') && (path.slice(-1) == '/')) {
+		if ((path !== '/') && (path.slice(-1) === '/')) {
 			return false;
 		}
 
@@ -495,7 +495,7 @@ function payloadVerifyRequestOrigin(payload) {
 		payloadPropertyExists(custom,'sslProtocols','origin.custom');
 
 		// ensure `origin.custom.domainName` is non-empty
-		if (custom.domainName.trim() == '') {
+		if (custom.domainName.trim() === '') {
 			throw new Error('payload property [origin.custom.domainName] must be non-empty');
 		}
 
@@ -511,8 +511,8 @@ function payloadVerifyRequestOrigin(payload) {
 
 		// ensure `origin.custom.port` is within bounds
 		if (
-			(custom.port != 80) &&
-			(custom.port != 443) &&
+			(custom.port !== 80) &&
+			(custom.port !== 443) &&
 			((custom.port < 1024) || (custom.port > 65535))
 		) {
 			throw new Error(`payload property [origin.custom.port] must be a value of 80,443 or between 1024-65535 - got [${custom.port}]`);
@@ -555,7 +555,7 @@ function payloadVerifyRequestOrigin(payload) {
 		}
 
 		// ensure `origin.s3.domainName` is non-empty
-		if (s3.domainName.trim() == '') {
+		if (s3.domainName.trim() === '') {
 			throw new Error('payload property [origin.s3.domainName] must be non-empty');
 		}
 
@@ -568,7 +568,7 @@ function payloadVerifyRequestOrigin(payload) {
 
 function payloadVerifyResponse(payload) {
 	// payload must be an object
-	if (typeof payload != 'object') {
+	if (typeof payload !== 'object') {
 		throw new Error('expected payload to be of type object');
 	}
 
@@ -589,7 +589,7 @@ function payloadVerifyPropertyHeaders(payload,property,prefix) {
 	const headerSet = payload[property];
 	for (const headerKey of Object.keys(headerSet)) {
 		// ensure header key is lowercase
-		if (headerKey != headerKey.toLowerCase()) {
+		if (headerKey !== headerKey.toLowerCase()) {
 			throw new Error(`payload [${payloadPropertyDisplay(property,prefix)}] keys must all be lowercase - found [${headerKey}]`);
 		}
 
@@ -601,17 +601,17 @@ function payloadVerifyPropertyHeaders(payload,property,prefix) {
 
 		for (const item of headerList) {
 			// each header item in list must be of object type
-			if (typeof item != 'object') {
+			if (typeof item !== 'object') {
 				throw new Error(`expected payload [${payloadPropertyDisplay(property,prefix)}] property [${headerKey}] items to be of type object`);
 			}
 
 			// if object has optional `key` property - must complement that of parent property name when lowercased
 			if (item.hasOwnProperty('key')) {
-				if (typeof item.key != 'string') {
+				if (typeof item.key !== 'string') {
 					throw new Error(`expected payload [${payloadPropertyDisplay(property,prefix)}] property [${headerKey}[].key] to be of type string`);
 				}
 
-				if (headerKey != item.key.toLowerCase()) {
+				if (headerKey !== item.key.toLowerCase()) {
 					throw new Error(`expected payload [${payloadPropertyDisplay(property,prefix)}] property [${headerKey}[].key] of [${item.key}] to match lowercased [${headerKey}] parent`);
 				}
 			}
@@ -621,7 +621,7 @@ function payloadVerifyPropertyHeaders(payload,property,prefix) {
 				throw new Error(`expected payload [${payloadPropertyDisplay(property,prefix)}] property [${headerKey}[].value] not found`);
 			}
 
-			if (typeof item.value != 'string') {
+			if (typeof item.value !== 'string') {
 				throw new Error(`expected payload [${payloadPropertyDisplay(property,prefix)}] property [${headerKey}[].value] to be of type string`);
 			}
 		}
@@ -638,7 +638,7 @@ function payloadPropertyExists(payload,property,prefix) {
 
 function payloadPropertyExistsObject(payload,property,prefix) {
 	payloadPropertyExists(payload,property,prefix);
-	if (typeof payload[property] == 'object') {
+	if (typeof payload[property] === 'object') {
 		return;
 	}
 
@@ -647,7 +647,7 @@ function payloadPropertyExistsObject(payload,property,prefix) {
 
 function payloadPropertyExistsString(payload,property,prefix) {
 	payloadPropertyExists(payload,property,prefix);
-	if (typeof payload[property] == 'string') {
+	if (typeof payload[property] === 'string') {
 		return;
 	}
 
@@ -656,7 +656,7 @@ function payloadPropertyExistsString(payload,property,prefix) {
 
 function payloadPropertyExistsNumber(payload,property,prefix) {
 	payloadPropertyExists(payload,property,prefix);
-	if (typeof payload[property] == 'number') {
+	if (typeof payload[property] === 'number') {
 		return;
 	}
 

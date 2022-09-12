@@ -60,8 +60,8 @@ runner.add(async function testExecuteViewerRequest() {
 					{
 						key: 'X-My-Header',
 						value: 'viewer-request',
-					}
-				]
+					},
+				],
 			},
 			method: 'POST',
 			querystring: 'test=viewer-request-async',
@@ -84,8 +84,8 @@ runner.add(async function testExecuteViewerRequest() {
 					{
 						key: 'X-My-Header',
 						value: 'viewer-request',
-					}
-				]
+					},
+				],
 			},
 			method: 'POST',
 			querystring: 'test=viewer-request-callback',
@@ -149,8 +149,8 @@ runner.add(async function testExecuteOriginRequest() {
 					{
 						key: 'X-My-Header',
 						value: 'origin-request',
-					}
-				]
+					},
+				],
 			},
 			method: 'POST',
 			origin: {
@@ -163,7 +163,7 @@ runner.add(async function testExecuteOriginRequest() {
 					protocol: 'https',
 					readTimeout: 4,
 					sslProtocols: [],
-				}
+				},
 			},
 			querystring: 'test=origin-request-async',
 			uri: '/test/origin-request-async',
@@ -185,8 +185,8 @@ runner.add(async function testExecuteOriginRequest() {
 					{
 						key: 'X-My-Header',
 						value: 'origin-request',
-					}
-				]
+					},
+				],
 			},
 			method: 'POST',
 			origin: {
@@ -199,7 +199,7 @@ runner.add(async function testExecuteOriginRequest() {
 					protocol: 'https',
 					readTimeout: 4,
 					sslProtocols: [],
-				}
+				},
 			},
 			querystring: 'test=origin-request-callback',
 			uri: '/test/origin-request-callback',
@@ -258,8 +258,8 @@ runner.add(async function testExecuteOriginResponse() {
 					{
 						key: 'X-My-Header',
 						value: 'origin-response',
-					}
-				]
+					},
+				],
 			},
 			status: '304',
 			statusDescription: 'Mutated async',
@@ -279,8 +279,8 @@ runner.add(async function testExecuteOriginResponse() {
 					{
 						key: 'X-My-Header',
 						value: 'origin-response',
-					}
-				]
+					},
+				],
 			},
 			status: '304',
 			statusDescription: 'Mutated callback',
@@ -339,8 +339,8 @@ runner.add(async function testExecuteViewerResponse() {
 					{
 						key: 'X-My-Header',
 						value: 'viewer-response',
-					}
-				]
+					},
+				],
 			},
 			status: '304',
 			statusDescription: 'Mutated async',
@@ -360,8 +360,8 @@ runner.add(async function testExecuteViewerResponse() {
 					{
 						key: 'X-My-Header',
 						value: 'viewer-response',
-					}
-				]
+					},
+				],
 			},
 			status: '304',
 			statusDescription: 'Mutated callback',

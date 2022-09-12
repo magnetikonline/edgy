@@ -335,7 +335,7 @@ function testPropertyRequestOrigin(inst) {
 				protocol: 'https',
 				readTimeout: 4,
 				sslProtocols: [],
-			}
+			},
 		}
 	);
 
@@ -355,7 +355,7 @@ function testPropertyRequestOrigin(inst) {
 				{ key: 'Multi-Origin-Key',value: 'oranges' },
 			],
 			'x-remove-me': [
-				{ key: 'X-Remove-Me',value: 'banana',},
+				{ key: 'X-Remove-Me',value: 'banana' },
 			],
 			'user-agent': [
 				{ key: 'User-Agent',value: 'curl/7.x.x' },
@@ -435,7 +435,7 @@ function testPropertyRequestOrigin(inst) {
 				domainName: 'my-bucket.s3.ap-southeast-2.amazonaws.com',
 				path: '/',
 				region: '',
-			}
+			},
 		}
 	);
 
