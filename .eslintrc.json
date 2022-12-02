@@ -26,6 +26,9 @@
 		"quotes": [
 			"error",
 			"single"
+		],
+		"semi-spacing": [
+			"error"
 		]
 	}
 }
