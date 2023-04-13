@@ -27,8 +27,7 @@
 			"error",
 			"single"
 		],
-		"semi-spacing": [
-			"error"
-		]
+		"semi-spacing": "error",
+		"spaced-comment": "error"
 	}
 }
