@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout source
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
@@ -21,9 +21,9 @@ jobs:
         with:
           path: |
             ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+          key: ${{ runner.os }}-nodejs-${{ hashFiles('package-lock.json') }}
           restore-keys: |
-            ${{ runner.os }}-node-
+            ${{ runner.os }}-nodejs-
       - name: Install npm packages
         run: npm ci
       - name: Lint
