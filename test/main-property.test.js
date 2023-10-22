@@ -269,8 +269,8 @@ function testPropertyRequestHttpHeader(inst) {
 
 	// set a series of HTTP headers
 	inst
-		.setRequestHttpHeader('Multi-Key','single-header') // reduce to a single header
-		.setRequestHttpHeader('trim'); // remove header
+		.setRequestHttpHeader('Multi-Key','single-header') // reduce to single HTTP header
+		.setRequestHttpHeader('trim'); // remove HTTP header
 
 	assert.deepEqual(cfEventData(inst).request.headers,
 		{
@@ -364,8 +364,8 @@ function testPropertyRequestOrigin(inst) {
 	);
 
 	inst
-		.setOriginHttpHeader('Multi-Origin-Key','single-header') // reduce to a single header
-		.setOriginHttpHeader('X-Remove-Me'); // remove header
+		.setOriginHttpHeader('Multi-Origin-Key','single-header') // reduce to single HTTP header
+		.setOriginHttpHeader('X-Remove-Me'); // remove HTTP header
 
 	assert.deepEqual(cfEventData(inst).request.origin.custom.customHeaders,
 		{
@@ -502,7 +502,7 @@ function testPropertyResponseHttpHeader(inst) {
 	// initial state is an empty header set
 	assert.deepEqual(cfEventData(inst).response.headers,{});
 
-	// note: tested multiple HTTP header combos with `testPropertyRequestHttpHeader()` - so only limited testing here
+	// note: tested multiple HTTP header combos with `testPropertyRequestHttpHeader()` - so only perform limited testing here
 	inst
 		.addResponseHttpHeader('ETag','"e659e87d5a580948081a33d9d0e8d00e"')
 		.addResponseHttpHeader('Server','AmazonS3');

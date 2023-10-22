@@ -384,7 +384,7 @@ harness.setBody('data payload',false);
 ### `setRequestHttpHeader(key[,value])`
 ### `addRequestHttpHeader(key,value)`
 
-Sets/adds HTTP header items to the request payload:
+Sets/adds HTTP headers to the request payload:
 
 ```js
 const harness = new edgy.EVENT_TYPE_CONSTRUCTOR();
@@ -415,7 +415,7 @@ harness
 
 harness
   .setRequestHttpHeader('User-Agent','xyz')
-  .setRequestHttpHeader('X-Custom-Header'); // remove header
+  .setRequestHttpHeader('X-Custom-Header'); // remove HTTP header
 
 /*
 {
@@ -525,7 +525,7 @@ harness
 ### `setOriginHttpHeader(key[,value])`
 ### `addOriginHttpHeader(key,value)`
 
-Sets/adds HTTP header items to the origin event payload for [custom](#setorigincustomdomainnamepath) and [s3](#setorigins3domainnameregionpath) targets:
+Sets/adds HTTP headers to the origin request payload for [custom](#setorigincustomdomainnamepath) and [S3](#setorigins3domainnameregionpath) targets:
 
 ```js
 const harness = new edgy.EVENT_TYPE_CONSTRUCTOR();
@@ -560,7 +560,7 @@ harness
 }
 */
 
-harness.setOriginHttpHeader('X-Custom-Header'); // remove header
+harness.setOriginHttpHeader('X-Custom-Header'); // remove HTTP header
 
 /*
 {
