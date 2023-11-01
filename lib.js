@@ -506,7 +506,7 @@ function payloadVerifyRequestOrigin(payload) {
 
 		// ensure `origin.custom.path` is valid
 		if (!isValidPath(custom.path)) {
-			throw new Error(`payload property [origin.custom.path] must begin with, but not end with a forward slash - got [${custom.path}]`);
+			throw new Error(`payload property [origin.custom.path] must begin, but not end with a forward slash - got [${custom.path}]`);
 		}
 
 		// ensure `origin.custom.port` is within bounds
@@ -561,7 +561,7 @@ function payloadVerifyRequestOrigin(payload) {
 
 		// ensure `origin.s3.path` is valid
 		if (!isValidPath(s3.path)) {
-			throw new Error(`payload property [origin.s3.path] must begin with, but not end with a forward slash - got [${s3.path}]`);
+			throw new Error(`payload property [origin.s3.path] must begin, but not end with a forward slash - got [${s3.path}]`);
 		}
 	}
 }
