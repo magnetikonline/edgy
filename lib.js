@@ -232,6 +232,7 @@ function buildEventBase(eventType,hasOrigin,hasResponse) {
 }
 
 function setEdgeEventOriginCustom(event,domainName,path) {
+	// TODO: should have a check here for `path` that it meets requirements/format around slashes
 	cfEventData(event).request.origin = {
 		custom: {
 			customHeaders: {},
@@ -282,6 +283,7 @@ function setEdgeEventOriginSslProtocolList(event,protocolList) {
 }
 
 function setEdgeEventOriginS3(event,domainName,region,path) {
+	// TODO: should have a check here for `path` that it meets requirements/format around slashes
 	cfEventData(event).request.origin = {
 		s3: {
 			authMethod: 'none',
@@ -428,8 +430,8 @@ function payloadVerifyRequest(payload) {
 		throw new Error(`unexpected payload HTTP [method] of [${payload.method}]`);
 	}
 
-	// ensure `payload.uri` starts with forward slash
-	if (payload.uri.slice(0,1) !== '/') {
+	// ensure `payload.uri` begins with forward slash
+	if (payload.uri[0] !== '/') {
 		throw new Error(`payload value [uri] must begin with forward slash - got [${payload.uri}]`);
 	}
 
@@ -456,12 +458,18 @@ function payloadVerifyRequest(payload) {
 }
 
 function payloadVerifyRequestOrigin(payload) {
+	// TODO: might need to break out isValidPath() to top level function, as want to use it with setOriginCustom() / setOriginS3() methods
 	function isValidPath(path) {
-		if (path.slice(0,1) !== '/') {
+		if (path === '') {
+			return true;
+		}
+
+		if (path === '/') {
 			return false;
 		}
 
-		if ((path !== '/') && (path.slice(-1) === '/')) {
+		// invalid `path` if does not start with forward slash, or ends with one
+		if ((path[0] !== '/') || (path.slice(-1) === '/')) {
 			return false;
 		}
 
@@ -505,9 +513,12 @@ function payloadVerifyRequestOrigin(payload) {
 		}
 
 		// ensure `origin.custom.path` is valid
+		// TODO: do we have a test/check for this?
 		if (!isValidPath(custom.path)) {
-			throw new Error(`payload property [origin.custom.path] must begin, but not end with a forward slash - got [${custom.path}]`);
+			throw new Error(`payload property [origin.custom.path] must be empty string or begin, but not end with forward slash - got [${custom.path}]`);
 		}
+
+		// TODO: ensure path is below 255 characters
 
 		// ensure `origin.custom.port` is within bounds
 		if (
@@ -560,8 +571,9 @@ function payloadVerifyRequestOrigin(payload) {
 		}
 
 		// ensure `origin.s3.path` is valid
+		// TODO: do we have a test/check for this?
 		if (!isValidPath(s3.path)) {
-			throw new Error(`payload property [origin.s3.path] must begin, but not end with a forward slash - got [${s3.path}]`);
+			throw new Error(`payload property [origin.s3.path] must be empty string or begin, but not end with forward slash - got [${s3.path}]`);
 		}
 	}
 }
