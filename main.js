@@ -9,7 +9,15 @@ class ViewerRequest extends lib.EdgeEventRequestBase {
 	}
 
 	_payloadVerify(payload) {
-		lib.payloadVerifyRequest(payload);
+		if ('status' in payload) {
+			// A payload with a 'status' key means the request handler yielded a
+			// response object (short-circuiting the origin):
+			lib.payloadVerifyResponse(payload);
+		} else {
+			// A payload without a 'status' key means the request handler yielded
+			// a request object headed for the origin:
+			lib.payloadVerifyRequest(payload);
+		}
 	}
 }
 
@@ -70,8 +78,16 @@ class OriginRequest extends lib.EdgeEventRequestBase {
 	}
 
 	_payloadVerify(payload) {
-		lib.payloadVerifyRequest(payload);
-		lib.payloadVerifyRequestOrigin(payload);
+		if ('status' in payload) {
+			// A payload with a 'status' key means the request handler yielded a
+			// response object (short-circuiting the origin):
+			lib.payloadVerifyResponse(payload);
+		} else {
+			// A payload without a 'status' key means the request handler yielded
+			// a request object headed for the origin:
+			lib.payloadVerifyRequest(payload);
+			lib.payloadVerifyRequestOrigin(payload);
+		}
 	}
 }
 
