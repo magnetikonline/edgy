@@ -514,6 +514,10 @@ function payloadVerifyRequestOrigin(payload) {
 			throw new Error(`payload property [origin.custom.path] must be empty or begin, but not end with forward slash - got [${custom.path}]`);
 		}
 
+		if (custom.path.length > 255) {
+			throw new Error(`payload property [origin.custom.path] length must not exceed 255 characters - got [${custom.path}]`);
+		}
+
 		// ensure `origin.custom.port` is within bounds
 		if (
 			(custom.port !== 80) &&
