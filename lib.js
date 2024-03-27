@@ -428,8 +428,8 @@ function payloadVerifyRequest(payload) {
 		throw new Error(`unexpected payload HTTP [method] of [${payload.method}]`);
 	}
 
-	// ensure `payload.uri` starts with forward slash
-	if (payload.uri.slice(0,1) !== '/') {
+	// ensure `payload.uri` begins with forward slash
+	if (payload.uri[0] !== '/') {
 		throw new Error(`payload value [uri] must begin with forward slash - got [${payload.uri}]`);
 	}
 
@@ -457,7 +457,7 @@ function payloadVerifyRequest(payload) {
 
 function payloadVerifyRequestOrigin(payload) {
 	function isValidPath(path) {
-		if (path.slice(0,1) !== '/') {
+		if (path[0] !== '/') {
 			return false;
 		}
 
