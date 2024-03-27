@@ -93,7 +93,7 @@ function testPayloadVerifyRequest(inst,withMockOrigin = false) {
 		);
 	}
 
-	// test: passing a valid payload
+	// test: passing valid payload
 	callVerify(makePayload());
 
 	callVerify(makePayload(function(payload) {
@@ -242,7 +242,7 @@ function testPayloadVerifyRequest(inst,withMockOrigin = false) {
 
 	// test: optional `body` property is present
 
-	// test: passing a valid payload
+	// test: passing valid payload
 	callVerify(makePayloadWithBody());
 
 	callVerify(makePayloadWithBody(function(payload) {
@@ -418,7 +418,7 @@ function testPayloadVerifyRequestOrigin(inst) {
 
 	// test: origin [custom]
 
-	// test: passing a valid payload
+	// test: passing valid payload
 	callVerify(makePayloadWithOriginCustom());
 
 	callVerify(makePayloadWithOriginCustom(function(payload) {
@@ -666,7 +666,7 @@ function testPayloadVerifyRequestOrigin(inst) {
 
 	// test: origin [s3]
 
-	// test: passing a valid payload
+	// test: passing valid payload
 	callVerify(makePayloadWithOriginS3());
 
 	callVerify(makePayloadWithOriginS3(function(payload) {
@@ -843,7 +843,7 @@ function testPayloadVerifyResponse(inst) {
 		return payload;
 	}
 
-	// test: passing a valid payload
+	// test: passing valid payload
 	callVerify(makePayload());
 
 	callVerify(makePayload(function(payload) {
