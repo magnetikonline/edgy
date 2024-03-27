@@ -41,7 +41,7 @@ function testPayloadVerifyRequest(inst,withMockOrigin = false) {
 					customHeaders: {},
 					domainName: 'example.org',
 					keepaliveTimeout: 1,
-					path: '/',
+					path: '',
 					port: 443,
 					protocol: 'https',
 					readTimeout: 4,
@@ -356,7 +356,7 @@ function testPayloadVerifyRequestOrigin(inst) {
 						},
 						domainName: 'example.org',
 						keepaliveTimeout: 1,
-						path: '/',
+						path: '',
 						port: 443,
 						protocol: 'https',
 						readTimeout: 4,
@@ -383,7 +383,7 @@ function testPayloadVerifyRequestOrigin(inst) {
 							],
 						},
 						domainName: 'bucket.s3.us-east-1.amazonaws.com',
-						path: '/',
+						path: '',
 						region: 'us-east-1',
 					},
 				},
@@ -422,6 +422,10 @@ function testPayloadVerifyRequestOrigin(inst) {
 
 	// test: passing valid payload
 	callVerify(makePayloadWithOriginCustom());
+
+	callVerify(makePayloadWithOriginCustom(function(payload) {
+		payload.origin.custom.path = '/valid/path';
+	}));
 
 	callVerify(makePayloadWithOriginCustom(function(payload) {
 		payload.origin.custom.port = 80;
@@ -578,13 +582,13 @@ function testPayloadVerifyRequestOrigin(inst) {
 
 	assert.throws(function() {
 		callVerify(makePayloadWithOriginCustom(function(payload) {
-			payload.origin.custom.path = 'invalid';
+			payload.origin.custom.path = 'invalid/path';
 		}));
 	});
 
 	assert.throws(function() {
 		callVerify(makePayloadWithOriginCustom(function(payload) {
-			payload.origin.custom.path = '/invalid/';
+			payload.origin.custom.path = '/invalid/path/';
 		}));
 	});
 
@@ -673,6 +677,10 @@ function testPayloadVerifyRequestOrigin(inst) {
 
 	callVerify(makePayloadWithOriginS3(function(payload) {
 		payload.origin.s3.authMethod = 'origin-access-identity';
+	}));
+
+	callVerify(makePayloadWithOriginS3(function(payload) {
+		payload.origin.s3.path = '/valid/path';
 	}));
 
 	// test: payload missing/invalid property values
@@ -808,13 +816,13 @@ function testPayloadVerifyRequestOrigin(inst) {
 
 	assert.throws(function() {
 		callVerify(makePayloadWithOriginS3(function(payload) {
-			payload.origin.s3.path = 'invalid';
+			payload.origin.s3.path = 'invalid/path';
 		}));
 	});
 
 	assert.throws(function() {
 		callVerify(makePayloadWithOriginS3(function(payload) {
-			payload.origin.s3.path = '/invalid/';
+			payload.origin.s3.path = '/invalid/path/';
 		}));
 	});
 }

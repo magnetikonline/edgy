@@ -323,14 +323,14 @@ function testPropertyRequestOrigin(inst) {
 
 
 	// test: origin [custom]
-	inst.setOriginCustom('my-hostname.tld'); // note: `path` defaults to `/`
+	inst.setOriginCustom('my-hostname.tld'); // note: `path` defaults to empty string
 	assert.deepEqual(cfEventData(inst).request.origin,
 		{
 			custom: {
 				customHeaders: {},
 				domainName: 'my-hostname.tld',
 				keepaliveTimeout: 1,
-				path: '/',
+				path: '',
 				port: 443,
 				protocol: 'https',
 				readTimeout: 4,
@@ -426,21 +426,21 @@ function testPropertyRequestOrigin(inst) {
 
 
 	// test: origin [S3]
-	inst.setOriginS3('my-bucket.s3.ap-southeast-2.amazonaws.com'); // note: `path` defaults to `/`
+	inst.setOriginS3('my-bucket.s3.ap-southeast-2.amazonaws.com'); // note: `path` defaults to empty string
 	assert.deepEqual(cfEventData(inst).request.origin,
 		{
 			s3: {
 				authMethod: 'none',
 				customHeaders: {},
 				domainName: 'my-bucket.s3.ap-southeast-2.amazonaws.com',
-				path: '/',
+				path: '',
 				region: '',
 			},
 		}
 	);
 
 	inst.setOriginS3('my-bucket.s3.ap-southeast-2.amazonaws.com','ap-southeast-2');
-	assert.equal(cfEventData(inst).request.origin.s3.path,'/');
+	assert.equal(cfEventData(inst).request.origin.s3.path,'');
 	assert.equal(cfEventData(inst).request.origin.s3.region,'ap-southeast-2');
 	inst.setOriginS3('my-bucket.s3.ap-southeast-2.amazonaws.com','ap-southeast-2','/my/path');
 	assert.equal(cfEventData(inst).request.origin.s3.path,'/my/path');
