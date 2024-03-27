@@ -594,6 +594,12 @@ function testPayloadVerifyRequestOrigin(inst) {
 
 	assert.throws(function() {
 		callVerify(makePayloadWithOriginCustom(function(payload) {
+			payload.origin.custom.path = '/path/too/long'.repeat(20);
+		}));
+	});
+
+	assert.throws(function() {
+		callVerify(makePayloadWithOriginCustom(function(payload) {
 			delete payload.origin.custom.port;
 		}));
 	});
