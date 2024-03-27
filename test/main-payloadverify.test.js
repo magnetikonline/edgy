@@ -206,7 +206,7 @@ function testPayloadVerifyRequest(inst,withMockOrigin = false) {
 
 	assert.throws(function() {
 		callVerify(makePayload(function(payload) {
-			payload.method = 'invalid_http_method';
+			payload.method = 'INVALID_HTTP_METHOD';
 		}));
 	});
 
@@ -236,7 +236,7 @@ function testPayloadVerifyRequest(inst,withMockOrigin = false) {
 
 	assert.throws(function() {
 		callVerify(makePayload(function(payload) {
-			payload.uri = 'no_leading_slash';
+			payload.uri = 'missing/leading/slash';
 		}));
 	});
 
@@ -660,7 +660,7 @@ function testPayloadVerifyRequestOrigin(inst) {
 
 	assert.throws(function() {
 		callVerify(makePayloadWithOriginCustom(function(payload) {
-			payload.origin.custom.sslProtocols = ['invalid_proto'];
+			payload.origin.custom.sslProtocols = ['INVALID_PROTOv1.2'];
 		}));
 	});
 
