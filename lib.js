@@ -237,7 +237,7 @@ function setEdgeEventOriginCustom(event,domainName,path) {
 			customHeaders: {},
 			domainName: domainName,
 			keepaliveTimeout: 1,
-			path: (path || '/'),
+			path: (path || ''),
 			port: 443,
 			protocol: 'https',
 			readTimeout: 4,
@@ -287,7 +287,7 @@ function setEdgeEventOriginS3(event,domainName,region,path) {
 			authMethod: 'none',
 			customHeaders: {},
 			domainName: domainName,
-			path: (path || '/'),
+			path: (path || ''),
 			region: (region || ''),
 		},
 	};
@@ -457,11 +457,16 @@ function payloadVerifyRequest(payload) {
 
 function payloadVerifyRequestOrigin(payload) {
 	function isValidPath(path) {
-		if (path[0] !== '/') {
+		if (path === '') {
+			return true;
+		}
+
+		if (path === '/') {
 			return false;
 		}
 
-		if ((path !== '/') && (path.slice(-1) === '/')) {
+		// invalid path if not begin with forward slash, or ending with one
+		if ((path[0] !== '/') || (path.slice(-1) === '/')) {
 			return false;
 		}
 
@@ -506,7 +511,7 @@ function payloadVerifyRequestOrigin(payload) {
 
 		// ensure `origin.custom.path` is valid
 		if (!isValidPath(custom.path)) {
-			throw new Error(`payload property [origin.custom.path] must begin, but not end with a forward slash - got [${custom.path}]`);
+			throw new Error(`payload property [origin.custom.path] must be empty or begin, but not end with forward slash - got [${custom.path}]`);
 		}
 
 		// ensure `origin.custom.port` is within bounds
@@ -561,7 +566,7 @@ function payloadVerifyRequestOrigin(payload) {
 
 		// ensure `origin.s3.path` is valid
 		if (!isValidPath(s3.path)) {
-			throw new Error(`payload property [origin.s3.path] must begin, but not end with a forward slash - got [${s3.path}]`);
+			throw new Error(`payload property [origin.s3.path] must be empty or begin, but not end with forward slash - got [${s3.path}]`);
 		}
 	}
 }
