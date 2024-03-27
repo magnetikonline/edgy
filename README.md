@@ -144,7 +144,7 @@ async function myTest() {
         authMethod: 'none',
         customHeaders: {},
         domainName: 'mybucket.s3.ap-southeast-2.amazonaws.com',
-        path: '/',
+        path: '',
         region: 'ap-southeast-2'
       }
     }
