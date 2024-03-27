@@ -391,28 +391,30 @@ function testPayloadVerifyRequestOrigin(inst) {
 		);
 	}
 
-	// test: origin must be an object
+	// test: origin property must exist and be an object
+	assert.throws(function() {
+		callVerify(makePayload());
+	});
+
 	assert.throws(function() {
 		callVerify(makePayload(function(payload) {
 			payload.origin = -1;
 		}));
 	});
 
-	// test: origin must contain *just one* of `custom` or `s3` - but never both
+	// test: origin must contain *just one* property of `custom` or `s3` - but never both
 	assert.throws(function() {
 		callVerify(makePayload(function(payload) {
-			// provided both
-			payload.origin = {
-				custom: {},
-				s3: {},
-			};
+			payload.origin = {};
 		}));
 	});
 
 	assert.throws(function() {
 		callVerify(makePayload(function(payload) {
-			// provided neither
-			payload.origin = {};
+			payload.origin = {
+				custom: {},
+				s3: {},
+			};
 		}));
 	});
 

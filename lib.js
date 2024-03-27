@@ -471,13 +471,13 @@ function payloadVerifyRequestOrigin(payload) {
 	payloadPropertyExistsObject(payload,'origin');
 	const origin = payload.origin;
 
-	// origin must contain a property - one of `custom` or `s3`
+	// origin must contain a property of either `custom` or `s3` - but never both
 	if (origin.hasOwnProperty('custom') && origin.hasOwnProperty('s3')) {
-		throw new Error('expected payload property [origin] to contain child property of [custom] or [s3] - never both');
+		throw new Error('payload property [origin] to contain child property of [custom] or [s3] - never both');
 	}
 
 	if (!origin.hasOwnProperty('custom') && !origin.hasOwnProperty('s3')) {
-		throw new Error('expected payload property [origin] to contain child property of [custom] or [s3]');
+		throw new Error('payload property [origin] to contain child property of [custom] or [s3]');
 	}
 
 	if (origin.hasOwnProperty('custom')) {
