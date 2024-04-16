@@ -642,7 +642,7 @@ function payloadPropertyExistsObject(payload,property,prefix) {
 		return;
 	}
 
-	throw new Error(`expected payload property [${payloadPropertyDisplay(property,prefix)}] to be of type object`);
+	throw new Error(`payload property [${payloadPropertyDisplay(property,prefix)}] to be of type object`);
 }
 
 function payloadPropertyExistsString(payload,property,prefix) {
@@ -651,7 +651,7 @@ function payloadPropertyExistsString(payload,property,prefix) {
 		return;
 	}
 
-	throw new Error(`expected payload property [${payloadPropertyDisplay(property,prefix)}] to be of type string`);
+	throw new Error(`payload property [${payloadPropertyDisplay(property,prefix)}] to be of type string`);
 }
 
 function payloadPropertyExistsNumber(payload,property,prefix) {
@@ -660,7 +660,7 @@ function payloadPropertyExistsNumber(payload,property,prefix) {
 		return;
 	}
 
-	throw new Error(`expected payload property [${payloadPropertyDisplay(property,prefix)}] to be of type number`);
+	throw new Error(`payload property [${payloadPropertyDisplay(property,prefix)}] to be of type number`);
 }
 
 function payloadPropertyDisplay(property,prefix) {
