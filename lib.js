@@ -232,12 +232,22 @@ function buildEventBase(eventType,hasOrigin,hasResponse) {
 }
 
 function setEdgeEventOriginCustom(event,domainName,path) {
+	// verify custom origin path
+	path = (path || '');
+	if (!isValidOriginPath(path)) {
+		throw new Error(`custom origin path must be empty or begin, but not end with forward slash - got [${path}]`);
+	}
+
+	if (path.length > 255) {
+		throw new Error(`custom origin path length must not exceed 255 characters - got [${path}]`);
+	}
+
 	cfEventData(event).request.origin = {
 		custom: {
 			customHeaders: {},
 			domainName: domainName,
 			keepaliveTimeout: 1,
-			path: (path || ''),
+			path: path,
 			port: 443,
 			protocol: 'https',
 			readTimeout: 4,
@@ -282,12 +292,18 @@ function setEdgeEventOriginSslProtocolList(event,protocolList) {
 }
 
 function setEdgeEventOriginS3(event,domainName,region,path) {
+	// verify S3 origin path
+	path = (path || '');
+	if (!isValidOriginPath(path)) {
+		throw new Error(`s3 origin path must be empty or begin, but not end with forward slash - got [${path}]`);
+	}
+
 	cfEventData(event).request.origin = {
 		s3: {
 			authMethod: 'none',
 			customHeaders: {},
 			domainName: domainName,
-			path: (path || ''),
+			path: path,
 			region: (region || ''),
 		},
 	};
@@ -456,23 +472,6 @@ function payloadVerifyRequest(payload) {
 }
 
 function payloadVerifyRequestOrigin(payload) {
-	function isValidPath(path) {
-		if (path === '') {
-			return true;
-		}
-
-		if (path === '/') {
-			return false;
-		}
-
-		// invalid path if not begin with forward slash, or ending with one
-		if ((path[0] !== '/') || (path.slice(-1) === '/')) {
-			return false;
-		}
-
-		return true;
-	}
-
 	payloadPropertyExistsObject(payload,'origin');
 	const origin = payload.origin;
 
@@ -510,7 +509,7 @@ function payloadVerifyRequestOrigin(payload) {
 		}
 
 		// ensure `origin.custom.path` is valid
-		if (!isValidPath(custom.path)) {
+		if (!isValidOriginPath(custom.path)) {
 			throw new Error(`payload property [origin.custom.path] must be empty or begin, but not end with forward slash - got [${custom.path}]`);
 		}
 
@@ -569,7 +568,7 @@ function payloadVerifyRequestOrigin(payload) {
 		}
 
 		// ensure `origin.s3.path` is valid
-		if (!isValidPath(s3.path)) {
+		if (!isValidOriginPath(s3.path)) {
 			throw new Error(`payload property [origin.s3.path] must be empty or begin, but not end with forward slash - got [${s3.path}]`);
 		}
 	}
@@ -674,6 +673,23 @@ function payloadPropertyExistsNumber(payload,property,prefix) {
 
 function payloadPropertyDisplay(property,prefix) {
 	return (prefix) ? `${prefix}.${property}` : property;
+}
+
+function isValidOriginPath(path) {
+	if (path === '') {
+		return true;
+	}
+
+	if (path === '/') {
+		return false;
+	}
+
+	// invalid path if not begin with forward slash, or ending with one
+	if ((path[0] !== '/') || (path.slice(-1) === '/')) {
+		return false;
+	}
+
+	return true;
 }
 
 function cfEventData(event) {

@@ -18,7 +18,7 @@ class OriginRequest extends lib.EdgeEventRequestBase {
 		super('origin-request',true);
 	}
 
-	// [set|add]Origin*() methods shared by `OriginRequest` / `OriginResponse`
+	// [set|add]Origin*() methods shared by `OriginRequest`/`OriginResponse`
 	setOriginCustom(domainName,path) {
 		lib.setEdgeEventOriginCustom(this._event,domainName,path);
 		return this;
@@ -80,7 +80,7 @@ class OriginResponse extends lib.EdgeEventResponseBase {
 		super('origin-response',true);
 	}
 
-	// [set|add]Origin*() methods shared by `OriginRequest` / `OriginResponse`
+	// [set|add]Origin*() methods shared by `OriginRequest`/`OriginResponse`
 	setOriginCustom(domainName,path) {
 		lib.setEdgeEventOriginCustom(this._event,domainName,path);
 		return this;

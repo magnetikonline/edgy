@@ -311,7 +311,7 @@ function testPropertyRequestOrigin(inst) {
 
 	assert.deepEqual(cfEventData(inst).request.origin,{});
 
-	// calling custom/S3 origin methods before origin mode set should throw error
+	// calling any custom/S3 origin methods before origin mode set should throw error
 	throwsOriginModeCustom(function() { inst.setOriginKeepaliveTimeout(666); });
 	throwsOriginModeCustom(function() { inst.setOriginPort(123); });
 	throwsOriginModeCustom(function() { inst.setOriginHttps(); });
@@ -341,11 +341,14 @@ function testPropertyRequestOrigin(inst) {
 
 	inst.setOriginCustom('my-hostname.tld','/my/path');
 	assert.equal(cfEventData(inst).request.origin.custom.path,'/my/path');
+	assert.throws(function() { inst.setOriginCustom('my-hostname.tld','invalid/path'); });
+	assert.throws(function() { inst.setOriginCustom('my-hostname.tld','/invalid/path/'); });
+	assert.throws(function() { inst.setOriginCustom('my-hostname.tld','/path/too/long'.repeat(20)); });
 
 	inst
-		.addOriginHttpHeader('User-Agent','curl/7.x.x')
 		.addOriginHttpHeader('Multi-Origin-Key','apples')
 		.addOriginHttpHeader('Multi-Origin-Key','oranges')
+		.addOriginHttpHeader('User-Agent','curl/7.x.x')
 		.addOriginHttpHeader('X-Remove-Me','banana');
 
 	assert.deepEqual(cfEventData(inst).request.origin.custom.customHeaders,
@@ -426,7 +429,7 @@ function testPropertyRequestOrigin(inst) {
 
 
 	// test: origin [S3]
-	inst.setOriginS3('my-bucket.s3.ap-southeast-2.amazonaws.com'); // note: `path` defaults to empty string
+	inst.setOriginS3('my-bucket.s3.ap-southeast-2.amazonaws.com'); // note: `region` and `path` defaults to empty string
 	assert.deepEqual(cfEventData(inst).request.origin,
 		{
 			s3: {
@@ -445,11 +448,13 @@ function testPropertyRequestOrigin(inst) {
 	inst.setOriginS3('my-bucket.s3.ap-southeast-2.amazonaws.com','ap-southeast-2','/my/path');
 	assert.equal(cfEventData(inst).request.origin.s3.path,'/my/path');
 	assert.equal(cfEventData(inst).request.origin.s3.region,'ap-southeast-2');
+	assert.throws(function() { inst.setOriginS3('my-bucket.s3.ap-southeast-2.amazonaws.com','ap-southeast-2','invalid/path'); });
+	assert.throws(function() { inst.setOriginS3('my-bucket.s3.ap-southeast-2.amazonaws.com','ap-southeast-2','/invalid/path/'); });
 
 	inst
-		.addOriginHttpHeader('User-Agent','curl/7.x.x')
 		.addOriginHttpHeader('Multi-Origin-Key','apples')
-		.addOriginHttpHeader('Multi-Origin-Key','oranges');
+		.addOriginHttpHeader('Multi-Origin-Key','oranges')
+		.addOriginHttpHeader('User-Agent','curl/7.x.x');
 
 	assert.deepEqual(cfEventData(inst).request.origin.s3.customHeaders,
 		{
