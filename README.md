@@ -389,7 +389,7 @@ Sets/adds HTTP headers to the request payload:
 ```js
 const harness = new edgy.EVENT_TYPE_CONSTRUCTOR();
 harness
-  .addRequestHttpHeader('User-Agent','curl/7.66.0')
+  .addRequestHttpHeader('User-Agent','curl/8.4.0')
   .addRequestHttpHeader('X-Custom-Header','apples')
   .addRequestHttpHeader('X-Custom-Header','oranges');
 
@@ -400,7 +400,7 @@ harness
       cf: {
         request: {
           headers: {
-            'user-agent': [ { key: 'User-Agent', value: 'curl/7.66.0' } ],
+            'user-agent': [ { key: 'User-Agent', value: 'curl/8.4.0' } ],
             'x-custom-header': [
               { key: 'X-Custom-Header', value: 'apples' },
               { key: 'X-Custom-Header', value: 'oranges' }

@@ -244,7 +244,7 @@ function testPropertyRequestHttpHeader(inst) {
 	// add a series of HTTP headers
 	inst
 		.addRequestHttpHeader('Host','my-hostname.tld')
-		.addRequestHttpHeader('User-Agent','curl/7.x.x')
+		.addRequestHttpHeader('User-Agent','curl/8.4.0')
 		.addRequestHttpHeader('Multi-Key','apples')
 		.addRequestHttpHeader('Multi-Key','oranges')
 		.addRequestHttpHeader(' Trim ',' value ');
@@ -262,7 +262,7 @@ function testPropertyRequestHttpHeader(inst) {
 				{ key: 'Trim',value: 'value' },
 			],
 			'user-agent': [
-				{ key: 'User-Agent',value: 'curl/7.x.x' },
+				{ key: 'User-Agent',value: 'curl/8.4.0' },
 			],
 		}
 	);
@@ -281,7 +281,7 @@ function testPropertyRequestHttpHeader(inst) {
 				{ key: 'Multi-Key',value: 'single-header' },
 			],
 			'user-agent': [
-				{ key: 'User-Agent',value: 'curl/7.x.x' },
+				{ key: 'User-Agent',value: 'curl/8.4.0' },
 			],
 		}
 	);
@@ -348,7 +348,7 @@ function testPropertyRequestOrigin(inst) {
 	inst
 		.addOriginHttpHeader('Multi-Origin-Key','apples')
 		.addOriginHttpHeader('Multi-Origin-Key','oranges')
-		.addOriginHttpHeader('User-Agent','curl/7.x.x')
+		.addOriginHttpHeader('User-Agent','curl/8.4.0')
 		.addOriginHttpHeader('X-Remove-Me','banana');
 
 	assert.deepEqual(cfEventData(inst).request.origin.custom.customHeaders,
@@ -361,7 +361,7 @@ function testPropertyRequestOrigin(inst) {
 				{ key: 'X-Remove-Me',value: 'banana' },
 			],
 			'user-agent': [
-				{ key: 'User-Agent',value: 'curl/7.x.x' },
+				{ key: 'User-Agent',value: 'curl/8.4.0' },
 			],
 		}
 	);
@@ -376,7 +376,7 @@ function testPropertyRequestOrigin(inst) {
 				{ key: 'Multi-Origin-Key',value: 'single-header' },
 			],
 			'user-agent': [
-				{ key: 'User-Agent',value: 'curl/7.x.x' },
+				{ key: 'User-Agent',value: 'curl/8.4.0' },
 			],
 		}
 	);
@@ -454,7 +454,7 @@ function testPropertyRequestOrigin(inst) {
 	inst
 		.addOriginHttpHeader('Multi-Origin-Key','apples')
 		.addOriginHttpHeader('Multi-Origin-Key','oranges')
-		.addOriginHttpHeader('User-Agent','curl/7.x.x');
+		.addOriginHttpHeader('User-Agent','curl/8.4.0');
 
 	assert.deepEqual(cfEventData(inst).request.origin.s3.customHeaders,
 		{
@@ -463,7 +463,7 @@ function testPropertyRequestOrigin(inst) {
 				{ key: 'Multi-Origin-Key',value: 'oranges' },
 			],
 			'user-agent': [
-				{ key: 'User-Agent',value: 'curl/7.x.x' },
+				{ key: 'User-Agent',value: 'curl/8.4.0' },
 			],
 		}
 	);
