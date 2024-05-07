@@ -27,6 +27,10 @@
 			"error",
 			"single"
 		],
+		"semi": [
+			"error",
+			"always"
+		],
 		"semi-spacing": "error",
 		"spaced-comment": "error"
 	}
