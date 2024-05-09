@@ -295,7 +295,7 @@ function setEdgeEventOriginS3(event,domainName,region,path) {
 	// verify S3 origin path
 	path = (path || '');
 	if (!isValidOriginPath(path)) {
-		throw new Error(`s3 origin path must be empty or begin, but not end with forward slash - got [${path}]`);
+		throw new Error(`S3 origin path must be empty or begin, but not end with forward slash - got [${path}]`);
 	}
 
 	cfEventData(event).request.origin = {
