@@ -46,13 +46,16 @@ runner.add(async function testExecuteViewerRequest() {
 		.setHttpMethod('POST')
 		.setQuerystring('?test=viewer-request-async');
 
-	const asyncResp = await vReq.execute(
+	// Test for ViewerRequest resulting in a _request object_ to proceed with
+	// to the origin:
+
+	const asyncRequestObjectResult = await vReq.execute(
 		buildEdgeFunctionRequestAsync(function(payload) {
 			payload.uri = '/test/viewer-request-async';
 		})
 	);
 
-	assert.deepEqual(asyncResp,
+	assert.deepEqual(asyncRequestObjectResult,
 		{
 			clientIp: '1.2.3.4',
 			headers: {
@@ -70,13 +73,13 @@ runner.add(async function testExecuteViewerRequest() {
 	);
 
 	vReq.setQuerystring('?test=viewer-request-callback');
-	const callbackResp = await vReq.execute(
+	const callbackRequestObjectResult = await vReq.execute(
 		buildEdgeFunctionRequestCallback(function(payload) {
 			payload.uri = '/test/viewer-request-callback';
 		})
 	);
 
-	assert.deepEqual(callbackResp,
+	assert.deepEqual(callbackRequestObjectResult,
 		{
 			clientIp: '1.2.3.4',
 			headers: {
@@ -92,6 +95,49 @@ runner.add(async function testExecuteViewerRequest() {
 			uri: '/test/viewer-request-callback',
 		}
 	);
+
+	// Test for ViewerRequest resulting in a _response object_ to short-circuit
+	// any request to the origin:
+
+	const asyncResponseObjectResult = await vReq.execute(
+		buildEdgeFunctionRequestAsync(function(payload) {
+			for (let k in payload) delete payload[k]
+			Object.assign(payload, { 'status': '302', 'statusDescription': 'Redirect' })
+		})
+	);
+
+	assert.deepEqual(asyncResponseObjectResult,
+		{
+			'status': '302',
+			'statusDescription': 'Redirect',
+		}
+	);
+
+	vReq.setQuerystring('?test=viewer-request-callback');
+	const callbackResponseObjectResult = await vReq.execute(
+		buildEdgeFunctionRequestCallback(function(payload) {
+			for (let k in payload) delete payload[k]
+			Object.assign(payload, { 'status': '302', 'statusDescription': 'Redirect' })
+		})
+	);
+
+	assert.deepEqual(callbackResponseObjectResult,
+		{
+			'status': '302',
+			'statusDescription': 'Redirect',
+		}
+	);
+});
+
+runner.add(async function testExecuteViewerRequest() {
+	const vReq = new main.ViewerRequest();
+
+	vReq
+		.setClientIp('1.2.3.4')
+		.addRequestHttpHeader('X-My-Header','viewer-request')
+		.setHttpMethod('POST')
+		.setQuerystring('?test=viewer-request-async');
+
 });
 
 
@@ -135,13 +181,16 @@ runner.add(async function testExecuteOriginRequest() {
 		.setHttpMethod('POST')
 		.setQuerystring('?test=origin-request-async');
 
-	const asyncResp = await oReq.execute(
+	// Test for OriginRequest resulting in a _request object_ to proceed with
+	// to the origin:
+
+	const asyncRequestObjectResult = await oReq.execute(
 		buildEdgeFunctionRequestAsync(function(payload) {
 			payload.uri = '/test/origin-request-async';
 		})
 	);
 
-	assert.deepEqual(asyncResp,
+	assert.deepEqual(asyncRequestObjectResult,
 		{
 			clientIp: '1.2.3.4',
 			headers: {
@@ -171,13 +220,13 @@ runner.add(async function testExecuteOriginRequest() {
 	);
 
 	oReq.setQuerystring('?test=origin-request-callback');
-	const callbackResp = await oReq.execute(
+	const callbackRequestObjectResult = await oReq.execute(
 		buildEdgeFunctionRequestCallback(function(payload) {
 			payload.uri = '/test/origin-request-callback';
 		})
 	);
 
-	assert.deepEqual(callbackResp,
+	assert.deepEqual(callbackRequestObjectResult,
 		{
 			clientIp: '1.2.3.4',
 			headers: {
@@ -203,6 +252,38 @@ runner.add(async function testExecuteOriginRequest() {
 			},
 			querystring: 'test=origin-request-callback',
 			uri: '/test/origin-request-callback',
+		}
+	);
+
+	// Test for OriginRequest resulting in a _response object_ to short-circuit
+	// any request to the origin:
+
+	const asyncResponseObjectResult = await oReq.execute(
+		buildEdgeFunctionRequestAsync(function(payload) {
+			for (let k in payload) delete payload[k]
+			Object.assign(payload, { 'status': '302', 'statusDescription': 'Redirect' })
+		})
+	);
+
+	assert.deepEqual(asyncResponseObjectResult,
+		{
+			'status': '302',
+			'statusDescription': 'Redirect',
+		}
+	);
+
+	oReq.setQuerystring('?test=origin-request-callback');
+	const callbackResponseObjectResult = await oReq.execute(
+		buildEdgeFunctionRequestCallback(function(payload) {
+			for (let k in payload) delete payload[k]
+			Object.assign(payload, { 'status': '302', 'statusDescription': 'Redirect' })
+		})
+	);
+
+	assert.deepEqual(callbackResponseObjectResult,
+		{
+			'status': '302',
+			'statusDescription': 'Redirect',
 		}
 	);
 });
@@ -245,13 +326,13 @@ runner.add(async function testExecuteOriginResponse() {
 		.addResponseHttpHeader('X-My-Header','origin-response')
 		.setResponseHttpStatusCode(304);
 
-	const asyncResp = await oRsp.execute(
+	const asyncResult = await oRsp.execute(
 		buildEdgeFunctionResponseAsync(function(payload) {
 			payload.statusDescription = 'Mutated async';
 		})
 	);
 
-	assert.deepEqual(asyncResp,
+	assert.deepEqual(asyncResult,
 		{
 			headers: {
 				'x-my-header': [
@@ -266,13 +347,13 @@ runner.add(async function testExecuteOriginResponse() {
 		}
 	);
 
-	const callbackResp = await oRsp.execute(
+	const callbackResult = await oRsp.execute(
 		buildEdgeFunctionResponseCallback(function(payload) {
 			payload.statusDescription = 'Mutated callback';
 		})
 	);
 
-	assert.deepEqual(callbackResp,
+	assert.deepEqual(callbackResult,
 		{
 			headers: {
 				'x-my-header': [
@@ -326,13 +407,13 @@ runner.add(async function testExecuteViewerResponse() {
 		.addResponseHttpHeader('X-My-Header','viewer-response')
 		.setResponseHttpStatusCode(304);
 
-	const asyncResp = await vRsp.execute(
+	const asyncResult = await vRsp.execute(
 		buildEdgeFunctionResponseAsync(function(payload) {
 			payload.statusDescription = 'Mutated async';
 		})
 	);
 
-	assert.deepEqual(asyncResp,
+	assert.deepEqual(asyncResult,
 		{
 			headers: {
 				'x-my-header': [
@@ -347,13 +428,13 @@ runner.add(async function testExecuteViewerResponse() {
 		}
 	);
 
-	const callbackResp = await vRsp.execute(
+	const callbackResult = await vRsp.execute(
 		buildEdgeFunctionResponseCallback(function(payload) {
 			payload.statusDescription = 'Mutated callback';
 		})
 	);
 
-	assert.deepEqual(callbackResp,
+	assert.deepEqual(callbackResult,
 		{
 			headers: {
 				'x-my-header': [
@@ -433,6 +514,5 @@ function buildEdgeFunctionResponseCallback(mutate) {
 		callback(null,payload);
 	};
 }
-
 
 runner.execute();

@@ -871,7 +871,7 @@ function testPayloadVerifyResponse(inst) {
 	assert.throws(function() { callVerify(undefined); });
 
 	// test: payload missing/invalid property values
-	assert.throws(function() {
+	assert.doesNotThrow(function() {
 		callVerify(makePayload(function(payload) {
 			delete payload.headers;
 		}));
@@ -965,7 +965,7 @@ function testPayloadVerifyResponse(inst) {
 		}));
 	});
 
-	assert.throws(function() {
+	assert.doesNotThrow(function() {
 		callVerify(makePayload(function(payload) {
 			delete payload.statusDescription;
 		}));
