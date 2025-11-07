@@ -2,7 +2,7 @@
 
 [![Test](https://github.com/magnetikonline/edgy/actions/workflows/test.yaml/badge.svg)](https://github.com/magnetikonline/edgy/actions/workflows/test.yaml)
 
-A harness to assist in the authoring of tests for Node.js based AWS CloudFront [Lambda@Edge](https://docs.aws.amazon.com/lambda/latest/dg/lambda-edge.html) functions.
+A harness to assist in the authoring of tests for Node.js based AWS CloudFront [Lambda@Edge](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/lambda-at-the-edge.html) functions.
 
 - [Installation](#installation)
 - [What can this do?](#what-can-this-do)
@@ -55,7 +55,7 @@ Edgy provides the following:
 
 ## Usage
 
-Edgy provides four core constructors, which directly relate to each of the [four life cycle points](https://docs.aws.amazon.com/lambda/latest/dg/lambda-edge.html) available in a CloudFront request. With an instance created, the desired event structure is then crafted and a supplied Lambda@Edge function executed against it.
+Edgy provides four core constructors, which directly relate to each of the [four life cycle points](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/lambda-edge-event-request-response.html) available in a CloudFront request. With an instance created, the desired event structure is then crafted and a supplied Lambda@Edge function executed against it.
 
 ### `ViewerRequest()`
 
@@ -641,6 +641,6 @@ const resp = await harness.execute(
 
 ## Reference
 
-- [Using AWS Lambda with CloudFront Lambda@Edge](https://docs.aws.amazon.com/lambda/latest/dg/lambda-edge.html)
+- [Customize at the edge with Lambda@Edge](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/lambda-at-the-edge.html)
 - [Lambda@Edge event structure](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/lambda-event-structure.html)
 - [Restrictions on edge functions](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/edge-functions-restrictions.html)
