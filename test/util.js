@@ -13,8 +13,8 @@ class TestCaseRunner {
 		for (const testCase of this._testCaseList) {
 			try {
 				await testCase();
-			} catch (ex) {
-				console.error(ex);
+			} catch (err) {
+				console.error(err);
 				return;
 			}
 		}
