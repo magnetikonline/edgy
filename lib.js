@@ -580,9 +580,11 @@ function payloadVerifyResponse(payload) {
 	}
 
 	// confirm expected properties exist
-	payloadVerifyPropertyHeaders(payload,'headers');
 	payloadPropertyExistsString(payload,'status');
-	payloadPropertyExistsString(payload,'statusDescription');
+
+	// confirm optional properties have the right type:
+	if ('headers' in payload) payloadVerifyPropertyHeaders(payload,'headers');
+	if ('statusDescription' in payload) payloadPropertyExistsString(payload,'statusDescription');
 
 	// ensure `payload.status` is a valid/known HTTP status code
 	if (!HTTP_STATUS_CODE_DESCRIPTION.hasOwnProperty(payload.status)) {
