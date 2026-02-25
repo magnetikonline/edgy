@@ -16,6 +16,8 @@
 		"url": "git+https://github.com/magnetikonline/edgy.git"
 	},
 	"devDependencies": {
-		"eslint": "^8.57.1"
+		"@eslint/js": "^10.0.1",
+		"eslint": "^10.0.0",
+		"globals": "^17.3.0"
 	}
 }
